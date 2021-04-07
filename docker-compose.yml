@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  oconnorevents.eventcatalog:
+    image: ${DOCKER_REGISTRY-}oconnoreventseventcatalog
+    build:
+      context: .
+      dockerfile: OconnorEvents.EventCatalog/Dockerfile
