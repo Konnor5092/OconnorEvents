@@ -1,8 +1,36 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31129.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{5BD33567-9C9F-4522-9D07-2FFFE00AA038}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OconnorEvents.EventCatalog", "OconnorEvents.EventCatalog\OconnorEvents.EventCatalog.csproj", "{B2821360-4D09-48CF-8147-BC0505D878A7}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{4C951226-07EA-4329-8164-DEFE95CC9466}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B2821360-4D09-48CF-8147-BC0505D878A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2821360-4D09-48CF-8147-BC0505D878A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2821360-4D09-48CF-8147-BC0505D878A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2821360-4D09-48CF-8147-BC0505D878A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C951226-07EA-4329-8164-DEFE95CC9466}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C951226-07EA-4329-8164-DEFE95CC9466}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C951226-07EA-4329-8164-DEFE95CC9466}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C951226-07EA-4329-8164-DEFE95CC9466}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B2821360-4D09-48CF-8147-BC0505D878A7} = {5BD33567-9C9F-4522-9D07-2FFFE00AA038}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A86A1DC8-3461-4339-A7FA-649CD463C76F}
 	EndGlobalSection
 EndGlobal
