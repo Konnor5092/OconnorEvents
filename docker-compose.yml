@@ -1,8 +1,25 @@
 version: '3.4'
 
+networks:
+  oconnorevents-network:
+
 services:
   oconnorevents.eventcatalog:
+    container_name: oconnoreventseventcatalogapi
     image: ${DOCKER_REGISTRY-}oconnoreventseventcatalog
     build:
       context: .
       dockerfile: OconnorEvents.EventCatalog/Dockerfile
+    networks:
+      - oconnorevents-network
+
+  oconnorevents.eventcatalog.sqlserver:
+    container_name: oconnoreventseventcatalogsqlserver
+    image: "mcr.microsoft.com/mssql/server"
+    ports:
+      - "1433:1433"
+    environment:
+        SA_PASSWORD: "2@LaiNw)PDvs^t>L!Ybt]6H^%h3U>M"
+        ACCEPT_EULA: "Y"
+    networks:
+      - oconnorevents-network
