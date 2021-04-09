@@ -8,6 +8,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="MediatR" Version="9.0.0" />
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.5" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.5">
           <PrivateAssets>all</PrivateAssets>
@@ -21,6 +23,11 @@
     <ItemGroup>
       <Folder Include="Entities\" />
       <Folder Include="Dtos\" />
+      <Folder Include="Commands\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\OconnorEvents.Mediatr.CollectionQuery\OconnorEvents.Mediatr.CollectionQuery.csproj" />
     </ItemGroup>
 
 </Project>

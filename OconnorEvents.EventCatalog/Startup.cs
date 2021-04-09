@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using OconnorEvents.EventCatalog.Binders;
 
 namespace OconnorEvents.EventCatalog
 {
@@ -29,7 +31,10 @@ namespace OconnorEvents.EventCatalog
             services.AddDbContext<EventCatalogDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddControllers();
+            services.AddMediatR(typeof(Startup));
+            services.AddControllers(c => {
+                c.ModelBinderProviders.Insert(0, new SortColumnModelBinder());
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "OconnorEvents.EventCatalog", Version = "v1"});

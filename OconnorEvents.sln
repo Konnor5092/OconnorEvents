@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OconnorEvents.EventCatalog"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{4C951226-07EA-4329-8164-DEFE95CC9466}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OconnorEvents.Mediatr.CollectionQuery", "OconnorEvents.Mediatr.CollectionQuery\OconnorEvents.Mediatr.CollectionQuery.csproj", "{55DB9F64-E5AB-47A5-8B58-073414896D9F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,12 +25,17 @@ Global
 		{4C951226-07EA-4329-8164-DEFE95CC9466}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C951226-07EA-4329-8164-DEFE95CC9466}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C951226-07EA-4329-8164-DEFE95CC9466}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55DB9F64-E5AB-47A5-8B58-073414896D9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55DB9F64-E5AB-47A5-8B58-073414896D9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55DB9F64-E5AB-47A5-8B58-073414896D9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55DB9F64-E5AB-47A5-8B58-073414896D9F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B2821360-4D09-48CF-8147-BC0505D878A7} = {5BD33567-9C9F-4522-9D07-2FFFE00AA038}
+		{55DB9F64-E5AB-47A5-8B58-073414896D9F} = {5BD33567-9C9F-4522-9D07-2FFFE00AA038}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A86A1DC8-3461-4339-A7FA-649CD463C76F}
