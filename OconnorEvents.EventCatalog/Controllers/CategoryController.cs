@@ -21,7 +21,10 @@ namespace OconnorEvents.EventCatalog.Controllers
         }
 
         [HttpGet]
-        public async Task<CollectionQueryResponse<CategoryDto>> Get(int pageSize, int pageNumber, IEnumerable<SortColumn>? sort)
+        public async Task<CollectionQueryResponse<CategoryDto>> Get(     
+            IEnumerable<SortColumn>? sort, 
+            int pageSize = 10,
+            int pageNumber = 0)
         {
             return await _mediator.Send(new GetCategories.Request()
             {
