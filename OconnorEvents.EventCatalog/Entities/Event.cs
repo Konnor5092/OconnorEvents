@@ -1,12 +1,13 @@
-﻿using System;
+﻿using OconnorEvents.Core;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace OconnorEvents.EventCatalog.Entities
 {
-    public class Event
+    public class Event : IEntity
     {
         [Required]
-        public Guid EventId { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public int Price { get; set; }
         public string Artist { get; set; }

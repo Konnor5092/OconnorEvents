@@ -1,11 +1,12 @@
-﻿using System;
+﻿using OconnorEvents.Core;
+using System;
 using System.Collections.Generic;
 
 namespace OconnorEvents.EventCatalog.Entities
 {
-    public class Category
+    public class Category : IEntity
     {
-        public Guid CategoryId { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public List<Event> Events { get; set; }
     }

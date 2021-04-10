@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,7 +14,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using OconnorEvents.EventCatalog.Behaviours;
 using OconnorEvents.EventCatalog.Binders;
+using OconnorEvents.EventCatalog.Middleware;
 
 namespace OconnorEvents.EventCatalog
 {
@@ -32,9 +35,16 @@ namespace OconnorEvents.EventCatalog
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddMediatR(typeof(Startup));
-            services.AddControllers(c => {
-                c.ModelBinderProviders.Insert(0, new SortColumnModelBinder());
-            });
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehaviour<,>));
+            services
+                .AddControllers(c => 
+                { 
+                    c.ModelBinderProviders.Insert(0, new SortColumnModelBinder());
+                })
+                .AddFluentValidation(cfg =>
+                {
+                    cfg.RegisterValidatorsFromAssemblyContaining<Startup>();
+                });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "OconnorEvents.EventCatalog", Version = "v1"});
@@ -49,13 +59,10 @@ namespace OconnorEvents.EventCatalog
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "OconnorEvents.EventCatalog v1"));
             }
-
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
+            app.UseValidationFailedMiddleware();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }

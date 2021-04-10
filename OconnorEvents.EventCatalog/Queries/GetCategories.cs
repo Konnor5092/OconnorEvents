@@ -39,7 +39,7 @@ namespace OconnorEvents.EventCatalog.Queries
                 return c => new CategoryDto
                 {
                     Name = c.Name,
-                    CategoryId = c.CategoryId
+                    CategoryId = c.Id
                 };
             }
 
@@ -50,7 +50,7 @@ namespace OconnorEvents.EventCatalog.Queries
                     return new Dictionary<string, Expression<Func<Category, object>>>
                     {
                         ["name"] = c => c.Name,
-                        ["categoryid"] = c => c.CategoryId
+                        ["categoryid"] = c => c.Id
                     };
                 }
             }

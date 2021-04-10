@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using OconnorEvents.EventCatalog.Dtos;
 using OconnorEvents.EventCatalog.Entities;
 using OconnorEvents.Mediatr.CollectionQuery;
@@ -15,6 +16,14 @@ namespace OconnorEvents.EventCatalog.Queries
         public class Request : CollectionQueryRequest<EventDto> 
         {
             public Guid? CategoryId { get; set; }
+        }
+
+        public class RequestValidator : AbstractValidator<Request>
+        {
+            public RequestValidator()
+            {
+                RuleFor(x => x.CategoryId).NotEmpty();
+            }
         }
 
         public class Handler : CollectionQueryRequestHandler<Request, EventDto, Event>
@@ -42,7 +51,7 @@ namespace OconnorEvents.EventCatalog.Queries
             {
                 return e => new EventDto
                 {
-                    EventId = e.EventId,
+                    EventId = e.Id,
                     Name = e.Name,
                     Price = e.Price,
                     Artist = e.Artist,

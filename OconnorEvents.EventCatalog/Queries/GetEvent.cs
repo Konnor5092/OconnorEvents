@@ -27,11 +27,11 @@ namespace OconnorEvents.EventCatalog.Queries
             {
                 var e = await _context.Events
                     .Include(x => x.Category)
-                    .SingleOrDefaultAsync(x => x.EventId == request.EventId);
+                    .SingleOrDefaultAsync(x => x.Id == request.EventId);
 
                 return new EventDto
                 {
-                    EventId = e.EventId,
+                    EventId = e.Id,
                     Name = e.Name,
                     Price = e.Price,
                     Artist = e.Artist,
