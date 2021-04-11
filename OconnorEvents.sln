@@ -11,7 +11,11 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OconnorEvents.Mediatr.CollectionQuery", "OconnorEvents.Mediatr.CollectionQuery\OconnorEvents.Mediatr.CollectionQuery.csproj", "{55DB9F64-E5AB-47A5-8B58-073414896D9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OconnorEvents.Core", "OconnorEvents.Core\OconnorEvents.Core.csproj", "{988FB366-885A-470C-B9A0-F9C931200D49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OconnorEvents.Core", "OconnorEvents.Core\OconnorEvents.Core.csproj", "{988FB366-885A-470C-B9A0-F9C931200D49}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration", "{77602107-00BC-41E4-BA11-C83957BBBC06}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{0F7C0E1D-BE35-44E4-B1AC-2239325B7676}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,8 +45,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B2821360-4D09-48CF-8147-BC0505D878A7} = {5BD33567-9C9F-4522-9D07-2FFFE00AA038}
-		{55DB9F64-E5AB-47A5-8B58-073414896D9F} = {5BD33567-9C9F-4522-9D07-2FFFE00AA038}
-		{988FB366-885A-470C-B9A0-F9C931200D49} = {5BD33567-9C9F-4522-9D07-2FFFE00AA038}
+		{55DB9F64-E5AB-47A5-8B58-073414896D9F} = {77602107-00BC-41E4-BA11-C83957BBBC06}
+		{988FB366-885A-470C-B9A0-F9C931200D49} = {77602107-00BC-41E4-BA11-C83957BBBC06}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A86A1DC8-3461-4339-A7FA-649CD463C76F}
