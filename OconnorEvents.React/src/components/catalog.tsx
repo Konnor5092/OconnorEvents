@@ -61,7 +61,7 @@ export default function Catalog() {
                 <TableCell>{event.artist}</TableCell>
                 <TableCell>{event.price}</TableCell>
                 <TableCell>
-                  <Button onClick={() => console.log(event)}>Details</Button>
+                  <Button variant="contained" color="primary">Details</Button>
                 </TableCell>
               </TableRow>
             ))}
