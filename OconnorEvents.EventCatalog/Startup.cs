@@ -31,6 +31,18 @@ namespace OconnorEvents.EventCatalog
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .WithOrigins(Configuration["AllowedOrigin"])
+                        .WithExposedHeaders("Content-Disposition");
+                });
+            });
+
             services.AddDbContext<EventCatalogDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -61,6 +73,7 @@ namespace OconnorEvents.EventCatalog
             }
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseCors("CorsPolicy");
             app.UseAuthorization();
             app.UseValidationFailedMiddleware();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });

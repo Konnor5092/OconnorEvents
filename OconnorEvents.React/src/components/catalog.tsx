@@ -7,15 +7,32 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import { EventList } from "../types/eventList";
+import axios from "axios";
+import { Button } from "@material-ui/core";
+import { format } from "date-fns";
+import moment from "moment";
 
-type CalculatorProps = {
-  left: number;
-  operator: string;
-  right: number;
-};
+const useStyles = makeStyles({
+  thumbnails: {
+    width: 175,
+    height: 100,
+  },
+});
 
-//export default function Catalog({ left, operator, right }: CalculatorProps) {
 export default function Catalog() {
+  const classes = useStyles();
+  const [eventList, setEventList] = React.useState<EventList[]>([]);
+
+  React.useEffect(() => {
+    axios
+      .get("https://localhost:5001/api/events", { responseType: "json" })
+      .then((response) => {
+        setEventList(response.data.items);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
   return (
     <TableContainer component={Paper}>
       <Table aria-label="simple table">
@@ -30,14 +47,24 @@ export default function Catalog() {
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow>
-            <TableCell component="th" scope="row">IMG</TableCell>
-            <TableCell>09/05/2021</TableCell>
-            <TableCell>To the moon and back</TableCell>
-            <TableCell>Nick Sailor</TableCell>
-            <TableCell>$135</TableCell>
-            <TableCell>Details</TableCell>
-          </TableRow>
+          {eventList &&
+            eventList.map((event: EventList) => (
+              <TableRow key={event.eventId}>
+                <TableCell
+                  component="th"
+                  scope="row"
+                >
+                  <img src={event.imageUrl} className={classes.thumbnails}/>
+                </TableCell>
+                <TableCell>{moment(event.date).format("DD/MM/YYYY")}</TableCell>
+                <TableCell>{event.name}</TableCell>
+                <TableCell>{event.artist}</TableCell>
+                <TableCell>{event.price}</TableCell>
+                <TableCell>
+                  <Button onClick={() => console.log(event)}>Details</Button>
+                </TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </TableContainer>

@@ -22,7 +22,7 @@ namespace OconnorEvents.EventCatalog.Queries
         {
             public RequestValidator()
             {
-                RuleFor(x => x.CategoryId).NotEmpty();
+                //RuleFor(x => x.CategoryId).NotEmpty();
             }
         }
 
