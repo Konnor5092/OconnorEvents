@@ -12,6 +12,8 @@ services:
       dockerfile: OconnorEvents.EventCatalog/Dockerfile
     networks:
       - oconnorevents-network
+    depends_on:
+      - oconnorevents.eventcatalog.sqlserver
 
   oconnorevents.eventcatalog.sqlserver:
     container_name: oconnoreventseventcatalogsqlserver
