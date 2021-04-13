@@ -1,21 +1,16 @@
-import React from "react";
-import logo from "./logo.svg";
-import Catalog from "./components/catalog";
-import Header from "./components/header";
-import { Grid } from "@material-ui/core";
+import HomePage from "./components/homePage";
+import { Redirect, Route, Switch } from "react-router-dom";
 
 function App() {
   return (
-    <>
-      <Grid container direction="column" spacing={2}>
-          <Header />
-        <Grid item container justify="center">
-          <Grid item>
-            <Catalog />
-          </Grid>
-        </Grid>
-      </Grid>
-    </>
+    <Switch>
+      <Route exact path="/">
+        <Redirect to="/EventCatalog" />
+      </Route>
+      <Route path="/EventCatalog">
+        <HomePage />
+      </Route>
+    </Switch>
   );
 }
 

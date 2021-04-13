@@ -12,6 +12,7 @@ import axios from "axios";
 import { Button } from "@material-ui/core";
 import { format } from "date-fns";
 import moment from "moment";
+import { Link, useRouteMatch } from "react-router-dom";
 
 const useStyles = makeStyles({
   thumbnails: {
@@ -23,6 +24,7 @@ const useStyles = makeStyles({
 export default function Catalog() {
   const classes = useStyles();
   const [eventList, setEventList] = React.useState<EventList[]>([]);
+  let { path } = useRouteMatch();
 
   React.useEffect(() => {
     axios
@@ -50,18 +52,17 @@ export default function Catalog() {
           {eventList &&
             eventList.map((event: EventList) => (
               <TableRow key={event.eventId}>
-                <TableCell
-                  component="th"
-                  scope="row"
-                >
-                  <img src={event.imageUrl} className={classes.thumbnails}/>
+                <TableCell component="th" scope="row">
+                  <img src={event.imageUrl} className={classes.thumbnails} />
                 </TableCell>
                 <TableCell>{moment(event.date).format("DD/MM/YYYY")}</TableCell>
                 <TableCell>{event.name}</TableCell>
                 <TableCell>{event.artist}</TableCell>
                 <TableCell>{event.price}</TableCell>
                 <TableCell>
-                  <Button variant="contained" color="primary">Details</Button>
+                  <Button variant="contained" color="primary">
+                    <Link to={`${path}/Detail?eventId=${event.eventId}`}>Details</Link>
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

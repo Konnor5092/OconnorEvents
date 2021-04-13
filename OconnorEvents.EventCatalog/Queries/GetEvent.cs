@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OconnorEvents.EventCatalog.Dtos;
 using System;
@@ -12,6 +13,14 @@ namespace OconnorEvents.EventCatalog.Queries
         public class Request : IRequest<EventDto> 
         {
             public Guid EventId { get; set; }
+        }
+
+        public class RequestValidator : AbstractValidator<Request>
+        {
+            public RequestValidator()
+            {
+                RuleFor(x => x.EventId).NotEqual(Guid.Parse("00000000-0000-0000-0000-000000000000"));
+            }
         }
 
         public class Handler : IRequestHandler<Request, EventDto>
