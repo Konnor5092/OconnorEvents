@@ -15,6 +15,15 @@ services:
     depends_on:
       - oconnorevents.eventcatalog.sqlserver
 
+  oconnorevents.shoppingbasket:
+    container_name: oconnoreventsshoppingbasketapi
+    image: ${DOCKER_REGISTRY-}oconnoreventsshoppingbasket
+    build:
+      context: .
+      dockerfile: OconnorEvents.ShoppingBasket/Dockerfile
+    networks:
+      - oconnorevents-network
+
   oconnorevents.eventcatalog.sqlserver:
     container_name: oconnoreventseventcatalogsqlserver
     image: "mcr.microsoft.com/mssql/server"
