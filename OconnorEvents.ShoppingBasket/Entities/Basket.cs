@@ -1,12 +1,13 @@
-﻿using System;
+﻿using OconnorEvents.Core;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace OconnorEvents.ShoppingBasket.Entities
 {
-    public class Basket
+    public class Basket : IEntity
     {
-        public Guid BasketId { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         public Guid UserId { get; set; }

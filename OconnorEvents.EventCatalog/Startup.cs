@@ -14,9 +14,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using OconnorEvents.EventCatalog.Behaviours;
 using OconnorEvents.EventCatalog.Binders;
-using OconnorEvents.EventCatalog.Middleware;
+using OconnorEvents.Mediatr.Core.Behaviours;
+using OconnorEvents.Mediatr.Core.Middleware;
 
 namespace OconnorEvents.EventCatalog
 {

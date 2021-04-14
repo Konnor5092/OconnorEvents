@@ -1,3 +1,5 @@
+using FluentValidation.AspNetCore;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -8,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using OconnorEvents.Mediatr.Core.Behaviours;
+using OconnorEvents.Mediatr.Core.Middleware;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +33,13 @@ namespace OconnorEvents.ShoppingBasket
             services.AddDbContext<ShoppingBasketDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddControllers();
+            services.AddMediatR(typeof(Startup));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehaviour<,>));
+
+            services.AddControllers().AddFluentValidation(cfg =>
+            {
+                cfg.RegisterValidatorsFromAssemblyContaining<Startup>();
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OconnorEvents.ShoppingBasket", Version = "v1" });
@@ -46,11 +56,10 @@ namespace OconnorEvents.ShoppingBasket
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
+            app.UseValidationFailedMiddleware();
+            app.UseEntityExistsMiddleware();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

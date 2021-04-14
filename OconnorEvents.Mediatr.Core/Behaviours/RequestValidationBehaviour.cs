@@ -1,12 +1,13 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
+using OconnorEvents.Mediatr.Core.Validation;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OconnorEvents.EventCatalog.Behaviours
+namespace OconnorEvents.Mediatr.Core.Behaviours
 {
     public class RequestValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
     {
@@ -27,6 +28,11 @@ namespace OconnorEvents.EventCatalog.Behaviours
                 {
                     failures.AddRange(validationResult.Errors);
                 }
+            }
+
+            if (failures.Any(f => f.ErrorCode == "EntityExistsValidator"))
+            {
+                throw new EntityNotFoundException(failures.Where(f => f.ErrorCode == "EntityExistsValidator"));
             }
 
             if (failures.Any())

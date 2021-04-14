@@ -1,10 +1,11 @@
-﻿using System;
+﻿using OconnorEvents.Core;
+using System;
 
 namespace OconnorEvents.ShoppingBasket.Entities
 {
-    public class Event
+    public class Event : IEntity
     {
-        public Guid EventId { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public DateTime Date { get; set; }
     }

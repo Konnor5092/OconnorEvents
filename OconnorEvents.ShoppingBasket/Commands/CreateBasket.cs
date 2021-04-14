@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using OconnorEvents.ShoppingBasket.Dtos;
 using OconnorEvents.ShoppingBasket.Entities;
 using System;
@@ -8,13 +7,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OconnorEvents.ShoppingBasket.Queries
+namespace OconnorEvents.ShoppingBasket.Commands
 {
-    public class GetBasket
+    public class CreateBasket
     {
         public class Request : IRequest<BasketDto>
         {
-            public Guid BasketId { get; set; }
+            public BasketForCreationDto BasketForCreation { get; set; }
         }
 
         public class Handler : IRequestHandler<Request, BasketDto>
@@ -28,16 +27,18 @@ namespace OconnorEvents.ShoppingBasket.Queries
 
             public async Task<BasketDto> Handle(Request request, CancellationToken cancellationToken)
             {
-                var basketEntity = await _context.Baskets
-                    .Include(sb => sb.BasketLines)
-                    .Where(b => b.Id == request.BasketId)
-                    .FirstOrDefaultAsync();
+                var basketEntity = new Basket
+                {
+                    UserId = request.BasketForCreation.UserId
+                };
+
+                _context.Baskets.Add(basketEntity);
+                await _context.SaveChangesAsync();
 
                 return new BasketDto
                 {
                     BasketId = basketEntity.Id,
-                    UserId = basketEntity.UserId,
-                    NumberOfItems = basketEntity.BasketLines.Sum(bl => bl.TicketAmount),
+                    UserId = basketEntity.UserId
                 };
             }
         }

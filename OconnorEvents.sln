@@ -38,7 +38,9 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "OconnorEvents.React", "Ocon
 		SlnRelativePath = "OconnorEvents.React\"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OconnorEvents.ShoppingBasket", "OconnorEvents.ShoppingBasket\OconnorEvents.ShoppingBasket.csproj", "{ED0FACA9-D229-4DCA-B6F0-BA7E103882A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OconnorEvents.ShoppingBasket", "OconnorEvents.ShoppingBasket\OconnorEvents.ShoppingBasket.csproj", "{ED0FACA9-D229-4DCA-B6F0-BA7E103882A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OconnorEvents.Mediatr.Core", "OconnorEvents.Mediatr.Core\OconnorEvents.Mediatr.Core.csproj", "{87794E2C-DEED-4745-B206-8E4BF912DFC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{ED0FACA9-D229-4DCA-B6F0-BA7E103882A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED0FACA9-D229-4DCA-B6F0-BA7E103882A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED0FACA9-D229-4DCA-B6F0-BA7E103882A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87794E2C-DEED-4745-B206-8E4BF912DFC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87794E2C-DEED-4745-B206-8E4BF912DFC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87794E2C-DEED-4745-B206-8E4BF912DFC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87794E2C-DEED-4745-B206-8E4BF912DFC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +85,7 @@ Global
 		{988FB366-885A-470C-B9A0-F9C931200D49} = {77602107-00BC-41E4-BA11-C83957BBBC06}
 		{A9192A13-19D5-427F-AC96-71F68537CC90} = {0F7C0E1D-BE35-44E4-B1AC-2239325B7676}
 		{ED0FACA9-D229-4DCA-B6F0-BA7E103882A0} = {5BD33567-9C9F-4522-9D07-2FFFE00AA038}
+		{87794E2C-DEED-4745-B206-8E4BF912DFC7} = {77602107-00BC-41E4-BA11-C83957BBBC06}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A86A1DC8-3461-4339-A7FA-649CD463C76F}

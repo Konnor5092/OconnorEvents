@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OconnorEvents.EventCatalog.Middleware
+namespace OconnorEvents.Mediatr.Core.Middleware
 {
     public static class MiddlewareExtensions
     {
@@ -12,6 +12,12 @@ namespace OconnorEvents.EventCatalog.Middleware
             this IApplicationBuilder builder)
         {
             return builder.UseMiddleware<ValidationFailedMiddleware>();
+        }
+
+        public static IApplicationBuilder UseEntityExistsMiddleware(
+            this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<EntityExistsMiddleware>();
         }
     }
 }

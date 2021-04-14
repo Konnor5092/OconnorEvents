@@ -21,7 +21,11 @@
 
   <ItemGroup>
     <Folder Include="Entities\" />
-    <Folder Include="Commands\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OconnorEvents.Core\OconnorEvents.Core.csproj" />
+    <ProjectReference Include="..\OconnorEvents.Mediatr.Core\OconnorEvents.Mediatr.Core.csproj" />
   </ItemGroup>
 
 </Project>
