@@ -1,20 +1,22 @@
 ﻿using FluentValidation;
 using FluentValidation.Validators;
+using Microsoft.EntityFrameworkCore;
 using OconnorEvents.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace OconnorEvents.ShoppingBasket.Validation
+namespace OconnorEvents.Mediatr.Core.Validation
 {
     public class EntityExistsValidator<T> : PropertyValidator<T, Guid>
     {
-        private readonly ShoppingBasketDbContext _context;
+        private readonly DbContext _context;
         private readonly Type _type;
 
-        public EntityExistsValidator(ShoppingBasketDbContext context, Type type)
+        public EntityExistsValidator(DbContext context, Type type)
         {
             _context = context;
             _type = type;
@@ -29,7 +31,7 @@ namespace OconnorEvents.ShoppingBasket.Validation
         {
             context.MessageFormatter.AppendArgument("Id", value);
 
-            var efSetMethod = typeof(ShoppingBasketDbContext).GetMethod(nameof(ShoppingBasketDbContext.Set), 
+            var efSetMethod = typeof(DbContext).GetMethod(nameof(DbContext.Set),
                 BindingFlags.Public | BindingFlags.Instance, null, new Type[] { }, null);
 
             efSetMethod = efSetMethod.MakeGenericMethod(_type);
