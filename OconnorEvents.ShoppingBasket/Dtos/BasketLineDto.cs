@@ -9,6 +9,6 @@ namespace OconnorEvents.ShoppingBasket.Dtos
         public Guid EventId { get; set; }
         public int Price { get; set; }
         public int TicketAmount { get; set; }
-        public Event Event { get; set; }
+        public EventDto Event { get; set; }
     }
 }

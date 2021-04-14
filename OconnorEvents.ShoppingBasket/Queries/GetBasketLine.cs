@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using OconnorEvents.Mediatr.Core.Validation;
 using OconnorEvents.ShoppingBasket.Dtos;
 using OconnorEvents.ShoppingBasket.Entities;
-using OconnorEvents.ShoppingBasket.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;

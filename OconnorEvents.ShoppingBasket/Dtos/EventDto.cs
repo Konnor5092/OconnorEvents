@@ -2,7 +2,7 @@
 
 namespace OconnorEvents.ShoppingBasket.Dtos
 {
-    public class Event
+    public class EventDto
     {
         public Guid EventId { get; set; }
         public string Name { get; set; }

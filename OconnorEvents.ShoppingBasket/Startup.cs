@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using OconnorEvents.Mediatr.Core.Behaviours;
 using OconnorEvents.Mediatr.Core.Middleware;
+using OconnorEvents.ShoppingBasket.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,9 @@ namespace OconnorEvents.ShoppingBasket
 
             services.AddMediatR(typeof(Startup));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehaviour<,>));
+
+            services.AddHttpClient<CreateBasketLine>(c =>
+                c.BaseAddress = new Uri(Configuration["ApiConfigs:EventCatalog:Uri"]));
 
             services.AddControllers().AddFluentValidation(cfg =>
             {

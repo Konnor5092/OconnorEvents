@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using OconnorEvents.ShoppingBasket.Commands;
 using OconnorEvents.ShoppingBasket.Dtos;
 using OconnorEvents.ShoppingBasket.Queries;
 using System;
@@ -28,6 +29,21 @@ namespace OconnorEvents.ShoppingBasket.Controllers
                 BasketId = basketId,
                 BasketLineId = basketLineId
             });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<BasketLineDto>> Post(Guid basketId, [FromBody] BasketLineForCreationDto basketLineForCreation)
+        {
+            var (existingLine, basketLineDto) = await _mediator.Send(new CreateBasketLine.Request()
+            {
+                BasketId = basketId,
+                BasketLineForCreation = basketLineForCreation
+            });
+
+            return CreatedAtRoute(
+                "GetBasketLine",
+                new { basketId = existingLine.BasketId, basketLineId = existingLine.Id },
+                basketLineDto);
         }
     }
 }
