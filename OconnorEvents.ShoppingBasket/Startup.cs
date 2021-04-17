@@ -2,21 +2,15 @@ using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using OconnorEvents.Mediatr.Core.Behaviours;
 using OconnorEvents.Mediatr.Core.Middleware;
 using OconnorEvents.ShoppingBasket.Commands;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OconnorEvents.ShoppingBasket
 {
@@ -31,6 +25,18 @@ namespace OconnorEvents.ShoppingBasket
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .WithOrigins(Configuration["AllowedOrigin"])
+                        .WithExposedHeaders("Content-Disposition");
+                });
+            });
+
             services.AddDbContext<ShoppingBasketDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -61,6 +67,7 @@ namespace OconnorEvents.ShoppingBasket
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseCors("CorsPolicy");
             app.UseAuthorization();
             app.UseValidationFailedMiddleware();
             app.UseEntityExistsMiddleware();

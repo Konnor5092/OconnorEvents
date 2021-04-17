@@ -13,6 +13,10 @@ import {
 } from "@material-ui/core";
 import moment from "moment";
 import { spacing } from "@material-ui/system";
+import { v4 as uuidv4 } from "uuid";
+import { BasketForCreationDto } from "../types/basketForCreationDto";
+import { BasketLineForCreationDto } from "../types/basketLineForCreationDto";
+import { BasketDto } from "../types/basketDto";
 
 const Grid = styled(MuiGrid)(spacing);
 const Typography = styled(MuiTypography)(spacing);
@@ -32,6 +36,7 @@ export default function Details() {
   const classes = useStyles();
   let query = useQuery();
   const [eventDetails, setEventDetails] = React.useState<EventDetails>(Object);
+  const [quantity, setQuantity] = React.useState(1);
 
   React.useEffect(() => {
     axios
@@ -43,6 +48,25 @@ export default function Details() {
       })
       .catch((error) => console.log(error));
   }, []);
+
+  const createAndNavigateToBasket = () => {
+    const basket: BasketForCreationDto = {
+      userId: uuidv4(),
+    };
+    axios
+      .post<BasketDto>("https://localhost:5003/api/baskets", basket)
+      .then((response) => {
+        const basketLine: BasketLineForCreationDto = {
+          eventId: eventDetails.eventId,
+          price: eventDetails.price,
+          ticketAmount: 50,
+        };
+        axios.post(
+          `https://localhost:5003/api/baskets/${response.data.basketId}/basketlines`,
+          basketLine
+        );
+      });
+  };
 
   return (
     <>
@@ -86,10 +110,15 @@ export default function Details() {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                value={quantity}
               />
             </Grid>
             <Grid item xs={5}>
-              <Button variant="outlined" color="primary">
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => createAndNavigateToBasket()}
+              >
                 ADD TO BASKET
               </Button>
             </Grid>
