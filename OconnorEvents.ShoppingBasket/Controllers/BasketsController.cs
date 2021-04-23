@@ -22,7 +22,7 @@ namespace OconnorEvents.ShoppingBasket.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("{basketId}", Name = "GetBasket")]
+        [HttpGet("{basketId:guid}", Name = "GetBasket")]
         public async Task<BasketDto> Get(Guid basketId)
         {
             return await _mediator.Send(new GetBasket.Request()

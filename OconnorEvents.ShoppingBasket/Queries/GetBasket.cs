@@ -16,7 +16,7 @@ namespace OconnorEvents.ShoppingBasket.Queries
     {
         public class Request : IRequest<BasketDto>
         {
-            public Guid BasketId { get; set; }
+            public Guid BasketId { get; init; }
         }
 
         public class RequestValidator : AbstractValidator<Request>
@@ -41,7 +41,7 @@ namespace OconnorEvents.ShoppingBasket.Queries
                 var basketEntity = await _context.Baskets
                     .Include(sb => sb.BasketLines)
                     .Where(b => b.Id == request.BasketId)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(cancellationToken: cancellationToken);
 
                 return new BasketDto
                 {

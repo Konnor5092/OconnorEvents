@@ -14,7 +14,7 @@ namespace OconnorEvents.ShoppingBasket.Queries
     {
         public class Request : IRequest<IEnumerable<BasketLineShoppingBasketDto>>
         {
-            public Guid BasketId { get; set; }
+            public Guid BasketId { get; init; }
         }
 
         public class Handler : IRequestHandler<Request, IEnumerable<BasketLineShoppingBasketDto>>
@@ -31,7 +31,7 @@ namespace OconnorEvents.ShoppingBasket.Queries
                 var basketLines = await _context.BasketLines
                     .Include(e => e.Event)
                     .Where(b => b.BasketId == request.BasketId)
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken: cancellationToken);
 
                 return basketLines.Select(b => new BasketLineShoppingBasketDto
                 {

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace OconnorEvents.ShoppingBasket.Controllers
 {
-    [Route("api/baskets/{basketId}/basketlines")]
+    [Route("api/baskets/{basketId:guid}/basketlines")]
     [ApiController]
     public class BasketLinesController : ControllerBase 
     {
@@ -25,16 +25,16 @@ namespace OconnorEvents.ShoppingBasket.Controllers
         [HttpGet]
         public async Task<IEnumerable<BasketLineShoppingBasketDto>> GetBasketLines(Guid basketId)
         {
-            return await _mediator.Send(new GetBasketLines.Request()
+            return await _mediator.Send(new GetBasketLines.Request
             {
                 BasketId = basketId
             });
         }
 
-        [HttpGet("{basketLineId}", Name = "GetBasketLine")]
+        [HttpGet("{basketLineId:guid}", Name = "GetBasketLine")]
         public async Task<BasketLineDto> GetBasketLine(Guid basketId, Guid basketLineId)
         {
-            return await _mediator.Send(new GetBasketLine.Request()
+            return await _mediator.Send(new GetBasketLine.Request
             {
                 BasketId = basketId,
                 BasketLineId = basketLineId
@@ -44,7 +44,7 @@ namespace OconnorEvents.ShoppingBasket.Controllers
         [HttpPost]
         public async Task<ActionResult<BasketLineDto>> Post(Guid basketId, [FromBody] BasketLineForCreationDto basketLineForCreation)
         {
-            var basketLineDto = await _mediator.Send(new CreateBasketLine.Request()
+            var basketLineDto = await _mediator.Send(new CreateBasketLine.Request
             {
                 BasketId = basketId,
                 BasketLineForCreation = basketLineForCreation
@@ -60,7 +60,7 @@ namespace OconnorEvents.ShoppingBasket.Controllers
         [Route("total")]
         public async Task<int> GetTotal(Guid basketId)
         {
-            return await _mediator.Send(new GetTotal.Request()
+            return await _mediator.Send(new GetTotal.Request
             {
                 BasketId = basketId
             });

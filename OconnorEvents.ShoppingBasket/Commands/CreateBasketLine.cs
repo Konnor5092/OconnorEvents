@@ -18,8 +18,8 @@ namespace OconnorEvents.ShoppingBasket.Commands
     {
         public class Request : IRequest<BasketLineDto>
         {
-            public Guid BasketId { get; set; }
-            public BasketLineForCreationDto BasketLineForCreation { get; set; }
+            public Guid BasketId { get; init; }
+            public BasketLineForCreationDto BasketLineForCreation { get; init; }
         }
 
         public class RequestValidator : AbstractValidator<Request>
@@ -53,11 +53,10 @@ namespace OconnorEvents.ShoppingBasket.Commands
                     {
                         EventId = request.BasketLineForCreation.EventId,
                         TicketAmount = request.BasketLineForCreation.TicketAmount,
-                        Price = request.BasketLineForCreation.Price
+                        Price = request.BasketLineForCreation.Price,
+                        BasketId = request.BasketId
                     };
-
-                    basketLineForCreation.BasketId = request.BasketId;
-
+                    
                     await _context.BasketLines.AddAsync(basketLineForCreation);
 
                     existingBasketLine = basketLineForCreation;

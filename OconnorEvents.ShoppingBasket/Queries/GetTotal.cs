@@ -16,7 +16,7 @@ namespace OconnorEvents.ShoppingBasket.Queries
     {
         public class Request : IRequest<int>
         {
-            public Guid BasketId { get; set; }
+            public Guid BasketId { get; init; }
         }
 
         public class RequestValidator : AbstractValidator<Request>
@@ -40,7 +40,7 @@ namespace OconnorEvents.ShoppingBasket.Queries
             {
                 return await _context.BasketLines
                     .Where(b => b.BasketId == request.BasketId)
-                    .SumAsync(b => b.Price * b.TicketAmount);
+                    .SumAsync(b => b.Price * b.TicketAmount, cancellationToken: cancellationToken);
             }
         }
     }

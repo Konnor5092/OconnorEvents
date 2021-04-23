@@ -14,7 +14,7 @@ namespace OconnorEvents.ShoppingBasket.Commands
     {
         public class Request : IRequest<BasketDto>
         {
-            public BasketForCreationDto BasketForCreation { get; set; }
+            public BasketForCreationDto BasketForCreation { get; init; }
         }
 
         public class Handler : IRequestHandler<Request, BasketDto>
@@ -28,7 +28,8 @@ namespace OconnorEvents.ShoppingBasket.Commands
 
             public async Task<BasketDto> Handle(Request request, CancellationToken cancellationToken)
             {
-                var basketEntity = await _context.Baskets.SingleOrDefaultAsync(b => b.UserId == request.BasketForCreation.UserId);
+                var basketEntity = await _context.Baskets
+                    .SingleOrDefaultAsync(b => b.UserId == request.BasketForCreation.UserId);
 
                 if (basketEntity == null)
                 {
