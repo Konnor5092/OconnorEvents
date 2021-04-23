@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace OconnorEvents.ShoppingBasket.Queries
 {
-    public class GetBasket
+    public class GetTotal
     {
-        public class Request : IRequest<BasketDto>
+        public class Request : IRequest<int>
         {
             public Guid BasketId { get; set; }
         }
@@ -27,7 +27,7 @@ namespace OconnorEvents.ShoppingBasket.Queries
             }
         }
 
-        public class Handler : IRequestHandler<Request, BasketDto>
+        public class Handler : IRequestHandler<Request, int>
         {
             private readonly ShoppingBasketDbContext _context;
 
@@ -36,19 +36,11 @@ namespace OconnorEvents.ShoppingBasket.Queries
                 _context = context;
             }
 
-            public async Task<BasketDto> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<int> Handle(Request request, CancellationToken cancellationToken)
             {
-                var basketEntity = await _context.Baskets
-                    .Include(sb => sb.BasketLines)
-                    .Where(b => b.Id == request.BasketId)
-                    .FirstOrDefaultAsync();
-
-                return new BasketDto
-                {
-                    BasketId = basketEntity.Id,
-                    UserId = basketEntity.UserId,
-                    NumberOfItems = basketEntity.BasketLines.Sum(bl => bl.TicketAmount),
-                };
+                return await _context.BasketLines
+                    .Where(b => b.BasketId == request.BasketId)
+                    .SumAsync(b => b.Price * b.TicketAmount);
             }
         }
     }

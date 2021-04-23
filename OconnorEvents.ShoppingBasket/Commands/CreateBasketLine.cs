@@ -16,7 +16,7 @@ namespace OconnorEvents.ShoppingBasket.Commands
 {
     public class CreateBasketLine
     {
-        public class Request : IRequest<(BasketLine, BasketLineDto)>
+        public class Request : IRequest<BasketLineDto>
         {
             public Guid BasketId { get; set; }
             public BasketLineForCreationDto BasketLineForCreation { get; set; }
@@ -27,50 +27,46 @@ namespace OconnorEvents.ShoppingBasket.Commands
             public RequestValidator(ShoppingBasketDbContext context)
             {
                 RuleFor(x => x.BasketId).EntityExists(context, typeof(Basket));
+                RuleFor(x => x.BasketLineForCreation.EventId).EntityExists(context, typeof(Event));
             }
         }
 
-        public class Handler : IRequestHandler<Request, (BasketLine, BasketLineDto)>
+        public class Handler : IRequestHandler<Request, BasketLineDto>
         {
             private readonly ShoppingBasketDbContext _context;
-            private readonly HttpClient _client;
 
-            public Handler(ShoppingBasketDbContext context, HttpClient client)
+            public Handler(ShoppingBasketDbContext context)
             {
                 _context = context;
-                _client = client;
             }
 
-            public async Task<(BasketLine, BasketLineDto)> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<BasketLineDto> Handle(Request request, CancellationToken cancellationToken)
             {
-                if (!await _context.Events.AnyAsync(e => e.Id == request.BasketLineForCreation.EventId))
-                {
-                    var response = await _client.GetAsync($"/api/events/{request.BasketLineForCreation.EventId}");
-                    var entityEvent = await response.ReadContentAs<Event>();
-                    _context.Events.Add(entityEvent);
-                    await _context.SaveChangesAsync();
-                }
-
-                var basketLineEntity = new BasketLine
-                {
-                    EventId = request.BasketLineForCreation.EventId,
-                    TicketAmount = request.BasketLineForCreation.TicketAmount,
-                    Price = request.BasketLineForCreation.Price
-                };
-
-                var existingLine = await _context.BasketLines
+                var existingBasketLine = await _context.BasketLines
                     .Include(bl => bl.Event)
-                    .Where(b => b.BasketId == request.BasketId && b.EventId == basketLineEntity.EventId)
+                    .Where(b => b.BasketId == request.BasketId && b.EventId == request.BasketLineForCreation.EventId)
                     .FirstOrDefaultAsync();
 
-                if (existingLine == null)
+                if (existingBasketLine == null)
                 {
-                    basketLineEntity.BasketId = request.BasketId;
-                    _context.BasketLines.Add(basketLineEntity);
+                    var basketLineForCreation = new BasketLine
+                    {
+                        EventId = request.BasketLineForCreation.EventId,
+                        TicketAmount = request.BasketLineForCreation.TicketAmount,
+                        Price = request.BasketLineForCreation.Price
+                    };
+
+                    basketLineForCreation.BasketId = request.BasketId;
+
+                    await _context.BasketLines.AddAsync(basketLineForCreation);
+
+                    existingBasketLine = basketLineForCreation;
+                } 
+                else
+                {
+                    existingBasketLine.TicketAmount += request.BasketLineForCreation.TicketAmount;
                 }
-
-                existingLine.TicketAmount += basketLineEntity.TicketAmount;
-
+              
                 await _context.SaveChangesAsync();
 
                 var basket = await _context.Baskets
@@ -89,14 +85,14 @@ namespace OconnorEvents.ShoppingBasket.Commands
                 await _context.BasketChangeEvents.AddAsync(basketChangeEvent);
                 await _context.SaveChangesAsync();
 
-                return (existingLine, new BasketLineDto
+                return new BasketLineDto
                 {
-                    BasketLineId = existingLine.Id,
-                    BasketId = existingLine.BasketId,
-                    EventId = existingLine.EventId,
-                    Price = existingLine.Price,
-                    TicketAmount = existingLine.TicketAmount
-                });
+                    BasketLineId = existingBasketLine.Id,
+                    BasketId = existingBasketLine.BasketId,
+                    EventId = existingBasketLine.EventId,
+                    Price = existingBasketLine.Price,
+                    TicketAmount = existingBasketLine.TicketAmount
+                };
             }
         }
     }

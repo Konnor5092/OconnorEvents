@@ -1,6 +1,8 @@
 import { Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
+import React from "react";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
   header: {
@@ -10,7 +12,11 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Header() {
+type HeaderProps = {
+  tickets: number
+}
+
+export default function Header({tickets}: HeaderProps) {
   const classes = useStyles();
 
   return (
@@ -37,10 +43,12 @@ export default function Header() {
             spacing={2}
           >
             <Grid item>
-              <ShoppingBasketIcon fontSize="large" />
+              <Link to={`/ShoppingBasket`}>
+                <ShoppingBasketIcon fontSize="large" />
+              </Link>
             </Grid>
             <Grid item>
-              <Typography variant="body1">0 tickets</Typography>
+              <Typography variant="body1">{tickets} tickets</Typography>
             </Grid>
           </Grid>
         </Grid>

@@ -13,11 +13,44 @@ import {
   Typography as MuiTypography,
 } from "@material-ui/core";
 import { spacing } from "@material-ui/system";
+import React from "react";
+import { BasketLineView } from "../types/basketLineView";
+import axios from "axios";
+import moment from "moment";
 
 const Grid = styled(MuiGrid)(spacing);
 const Typography = styled(MuiTypography)(spacing);
 
-export default function ShoppingBasket() {
+type ShoppingBasketProps = {
+  basketId: string;
+};
+
+export default function ShoppingBasket({ basketId }: ShoppingBasketProps) {
+  const [basketLines, setBasketLines] = React.useState<BasketLineView[]>([]);
+  const [total, setTotal] = React.useState(0);
+
+  React.useEffect(() => {
+    axios
+      .get(`https://localhost:5003/api/baskets/${basketId}/basketlines`, {
+        responseType: "json",
+      })
+      .then((response) => {
+        setBasketLines(response.data);
+        axios
+          .get(
+            `https://localhost:5003/api/baskets/${basketId}/basketlines/total`,
+            {
+              responseType: "json",
+            }
+          )
+          .then((response) => {
+            setTotal(response.data);
+          })
+          .catch((error) => console.log(error));
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
   return (
     <>
       <Grid container justify="center" mt={5}>
@@ -39,32 +72,38 @@ export default function ShoppingBasket() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                <TableRow key={1}>
-                  <TableCell component="th" scope="row">
-                    To the moon and back
-                  </TableCell>
-                  <TableCell>09/05/2021</TableCell>
-                  <TableCell>$135</TableCell>
-                  <TableCell>
-                    <Grid container spacing={2}>
-                      <Grid item xs={4}>
-                        <TextField
-                          id="standard-number"
-                          type="number"
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                        />
-                      </Grid>
-                      <Grid item xs={8}>
-                        <Button variant="outlined" color="primary">
-                          Update
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  </TableCell>
-                  <TableCell>$135</TableCell>
-                </TableRow>
+                {basketLines &&
+                  basketLines.map((basketLine: BasketLineView) => (
+                    <TableRow key={1}>
+                      <TableCell component="th" scope="row">
+                        {basketLine.eventName}
+                      </TableCell>
+                      <TableCell>
+                        {moment(basketLine.eventDate).format("DD/MM/YYYY")}
+                      </TableCell>
+                      <TableCell>${basketLine.pricePerTicket}</TableCell>
+                      <TableCell>
+                        <Grid container spacing={2}>
+                          <Grid item xs={4}>
+                            <TextField
+                              id="standard-number"
+                              type="number"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                              value={basketLine.quantity}
+                            />
+                          </Grid>
+                          <Grid item xs={8}>
+                            <Button variant="outlined" color="primary">
+                              Update
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </TableCell>
+                      <TableCell>${basketLine.total}</TableCell>
+                    </TableRow>
+                  ))}
                 <TableRow>
                   <TableCell />
                   <TableCell />
@@ -84,7 +123,7 @@ export default function ShoppingBasket() {
                     <Typography variant="h5">Total:</Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography variant="h5">$135</Typography>
+                    <Typography variant="h5">${total}</Typography>
                   </TableCell>
                 </TableRow>
               </TableBody>

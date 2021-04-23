@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OconnorEvents.ShoppingBasket.Commands;
 using OconnorEvents.ShoppingBasket.Dtos;
+using OconnorEvents.ShoppingBasket.Entities;
 using OconnorEvents.ShoppingBasket.Queries;
 using System;
 using System.Collections.Generic;
@@ -21,8 +22,17 @@ namespace OconnorEvents.ShoppingBasket.Controllers
             _mediator = mediator;
         }
 
+        [HttpGet]
+        public async Task<IEnumerable<BasketLineShoppingBasketDto>> GetBasketLines(Guid basketId)
+        {
+            return await _mediator.Send(new GetBasketLines.Request()
+            {
+                BasketId = basketId
+            });
+        }
+
         [HttpGet("{basketLineId}", Name = "GetBasketLine")]
-        public async Task<BasketLineDto> Get(Guid basketId, Guid basketLineId)
+        public async Task<BasketLineDto> GetBasketLine(Guid basketId, Guid basketLineId)
         {
             return await _mediator.Send(new GetBasketLine.Request()
             {
@@ -34,7 +44,7 @@ namespace OconnorEvents.ShoppingBasket.Controllers
         [HttpPost]
         public async Task<ActionResult<BasketLineDto>> Post(Guid basketId, [FromBody] BasketLineForCreationDto basketLineForCreation)
         {
-            var (existingLine, basketLineDto) = await _mediator.Send(new CreateBasketLine.Request()
+            var basketLineDto = await _mediator.Send(new CreateBasketLine.Request()
             {
                 BasketId = basketId,
                 BasketLineForCreation = basketLineForCreation
@@ -42,8 +52,18 @@ namespace OconnorEvents.ShoppingBasket.Controllers
 
             return CreatedAtRoute(
                 "GetBasketLine",
-                new { basketId = existingLine.BasketId, basketLineId = existingLine.Id },
+                new { basketId = basketLineDto.BasketId, basketLineId = basketLineDto.BasketLineId },
                 basketLineDto);
+        }
+
+        [HttpGet]
+        [Route("total")]
+        public async Task<int> GetTotal(Guid basketId)
+        {
+            return await _mediator.Send(new GetTotal.Request()
+            {
+                BasketId = basketId
+            });
         }
     }
 }

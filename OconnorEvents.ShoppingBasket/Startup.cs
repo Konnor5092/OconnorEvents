@@ -43,7 +43,7 @@ namespace OconnorEvents.ShoppingBasket
             services.AddMediatR(typeof(Startup));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehaviour<,>));
 
-            services.AddHttpClient<CreateBasketLine>(c =>
+            services.AddHttpClient("githubClient", c =>
                 c.BaseAddress = new Uri(Configuration["ApiConfigs:EventCatalog:Uri"]));
 
             services.AddControllers().AddFluentValidation(cfg =>

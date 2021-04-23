@@ -40,7 +40,12 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "OconnorEvents.React", "Ocon
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OconnorEvents.ShoppingBasket", "OconnorEvents.ShoppingBasket\OconnorEvents.ShoppingBasket.csproj", "{ED0FACA9-D229-4DCA-B6F0-BA7E103882A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OconnorEvents.Mediatr.Core", "OconnorEvents.Mediatr.Core\OconnorEvents.Mediatr.Core.csproj", "{87794E2C-DEED-4745-B206-8E4BF912DFC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OconnorEvents.Mediatr.Core", "OconnorEvents.Mediatr.Core\OconnorEvents.Mediatr.Core.csproj", "{87794E2C-DEED-4745-B206-8E4BF912DFC7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{15A5CA12-E5DA-4C04-91DF-0DD3CE632765}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

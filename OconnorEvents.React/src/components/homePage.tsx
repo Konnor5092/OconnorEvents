@@ -4,11 +4,16 @@ import Details from "./details";
 import ShoppingBasket from "./shoppingBasket";
 import { Grid } from "@material-ui/core";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
-import React from "react";
+import React, { useState } from "react";
 
 export default function HomePage() {
   const location = useLocation();
   const history = useHistory();
+  const [basketId, setBasketId] = useState('');
+  const [basketLines, addBasketLine] = useState(0);
+
+  const updateBasketLines = () => addBasketLine(basketLines + 1);
+  const updateBasketId = (id: string) => setBasketId(id);
 
   React.useEffect(() => {
     if (location.pathname === "/") {
@@ -18,16 +23,16 @@ export default function HomePage() {
 
   return (
     <Grid container direction="column" spacing={2}>
-      <Header />
+      <Header tickets={basketLines} />
       <Switch>
         <Route exact path="/EventCatalog">
           <Catalog />
         </Route>
         <Route exact path="/EventCatalog/Detail">
-          <Details />
+          <Details basketId={basketId} updateBasketLines={updateBasketLines} updateBasketId={updateBasketId} />
         </Route>
         <Route exact path="/ShoppingBasket">
-          <ShoppingBasket />
+          <ShoppingBasket basketId={basketId}/>
         </Route>
       </Switch>
     </Grid>

@@ -11,6 +11,7 @@ import {
   TextField,
   Typography as MuiTypography,
 } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 import moment from "moment";
 import { spacing } from "@material-ui/system";
 import { v4 as uuidv4 } from "uuid";
@@ -32,11 +33,22 @@ function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
-export default function Details() {
+type DetailsProps = {
+  basketId: string;
+  updateBasketId: (id: string) => void;
+  updateBasketLines: () => void;
+};
+
+export default function Details({
+  basketId,
+  updateBasketLines,
+  updateBasketId,
+}: DetailsProps) {
   const classes = useStyles();
   let query = useQuery();
   const [eventDetails, setEventDetails] = React.useState<EventDetails>(Object);
   const [quantity, setQuantity] = React.useState(1);
+  const [displayAlert, setDisplayAlert] = React.useState(false);
 
   React.useEffect(() => {
     axios
@@ -49,23 +61,42 @@ export default function Details() {
       .catch((error) => console.log(error));
   }, []);
 
-  const createAndNavigateToBasket = () => {
-    const basket: BasketForCreationDto = {
-      userId: uuidv4(),
-    };
-    axios
-      .post<BasketDto>("https://localhost:5003/api/baskets", basket)
-      .then((response) => {
-        const basketLine: BasketLineForCreationDto = {
-          eventId: eventDetails.eventId,
-          price: eventDetails.price,
-          ticketAmount: 50,
-        };
-        axios.post(
-          `https://localhost:5003/api/baskets/${response.data.basketId}/basketlines`,
-          basketLine
+  const handleChangeQuantity = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuantity(parseInt(event.target.value, 10));
+  };
+
+  const addToBasket = async () => {
+    let localBasketId = basketId;
+    if (!localBasketId) {
+      const basket: BasketForCreationDto = {
+        userId: uuidv4(),
+      };
+      try {
+        var response = await axios.post<BasketDto>(
+          "https://localhost:5003/api/baskets",
+          basket
         );
-      });
+        localBasketId = response.data.basketId;
+        updateBasketId(localBasketId);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    const basketLine: BasketLineForCreationDto = {
+      eventId: eventDetails.eventId,
+      price: eventDetails.price,
+      ticketAmount: quantity,
+    };
+    try {
+      await axios.post(
+        `https://localhost:5003/api/baskets/${localBasketId}/basketlines`,
+        basketLine
+      );
+      updateBasketLines();
+      setDisplayAlert(true);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -111,18 +142,32 @@ export default function Details() {
                   shrink: true,
                 }}
                 value={quantity}
+                onChange={handleChangeQuantity}
               />
             </Grid>
             <Grid item xs={5}>
               <Button
                 variant="outlined"
                 color="primary"
-                onClick={() => createAndNavigateToBasket()}
-              >
+                onClick={() => addToBasket()}>
                 ADD TO BASKET
               </Button>
             </Grid>
           </Grid>
+        </Grid>
+      </Grid>
+      <Grid container justify="center" mt={3}>
+        <Grid item xs={3} />
+        <Grid item xs={3}>
+          {displayAlert && (
+            <Alert
+              onClose={() => {
+                setDisplayAlert(false);
+              }}
+            >
+              You successfully added an item to the basket!
+            </Alert>
+          )}
         </Grid>
       </Grid>
     </>

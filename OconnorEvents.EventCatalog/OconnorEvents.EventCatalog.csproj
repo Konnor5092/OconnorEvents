@@ -34,6 +34,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Include="..\.editorconfig" Link=".editorconfig" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\OconnorEvents.Core\OconnorEvents.Core.csproj" />
       <ProjectReference Include="..\OconnorEvents.Mediatr.CollectionQuery\OconnorEvents.Mediatr.CollectionQuery.csproj" />
       <ProjectReference Include="..\OconnorEvents.Mediatr.Core\OconnorEvents.Mediatr.Core.csproj" />

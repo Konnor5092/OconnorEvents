@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using OconnorEvents.ShoppingBasket.Dtos;
 using OconnorEvents.ShoppingBasket.Entities;
 using System;
@@ -27,13 +28,18 @@ namespace OconnorEvents.ShoppingBasket.Commands
 
             public async Task<BasketDto> Handle(Request request, CancellationToken cancellationToken)
             {
-                var basketEntity = new Basket
-                {
-                    UserId = request.BasketForCreation.UserId
-                };
+                var basketEntity = await _context.Baskets.SingleOrDefaultAsync(b => b.UserId == request.BasketForCreation.UserId);
 
-                _context.Baskets.Add(basketEntity);
-                await _context.SaveChangesAsync();
+                if (basketEntity == null)
+                {
+                    basketEntity = new Basket
+                    {
+                        UserId = request.BasketForCreation.UserId
+                    };
+
+                    await _context.Baskets.AddAsync(basketEntity);
+                    await _context.SaveChangesAsync();
+                }           
 
                 return new BasketDto
                 {
