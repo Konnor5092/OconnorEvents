@@ -7,6 +7,7 @@ namespace OconnorEvents.ShoppingBasket.Dtos
 {
     public class BasketLineShoppingBasketDto
     {
+        public Guid Id { get; set; }
         public string EventName { get; set; }
         public DateTime EventDate { get; set; }
         public int PricePerTicket { get; set; }

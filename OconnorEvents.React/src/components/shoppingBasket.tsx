@@ -15,11 +15,17 @@ import {
 import { spacing } from "@material-ui/system";
 import React from "react";
 import { BasketLineView } from "../types/basketLineView";
+import { BasketLineForUpdateDto } from "../types/basketLineForUpdateDto";
 import axios from "axios";
 import moment from "moment";
 
 const Grid = styled(MuiGrid)(spacing);
 const Typography = styled(MuiTypography)(spacing);
+
+type BasketLineQuantity = {
+  basketLineId: string,
+  quantity: number
+}
 
 type ShoppingBasketProps = {
   basketId: string;
@@ -27,28 +33,65 @@ type ShoppingBasketProps = {
 
 export default function ShoppingBasket({ basketId }: ShoppingBasketProps) {
   const [basketLines, setBasketLines] = React.useState<BasketLineView[]>([]);
+  const [basketLineQuantities, setBasketLineQuantities] = React.useState<BasketLineQuantity[]>([]);
   const [total, setTotal] = React.useState(0);
 
+  const getBasketLines = async () => {
+    try {
+      const response = await axios.get(`https://localhost:5003/api/baskets/${basketId}/basketlines`);
+      setBasketLines(response.data);
+      setBasketLineQuantities(response.data.map(((basketLine: BasketLineView) => {
+        const basketLineQuantity: BasketLineQuantity = {
+          basketLineId: basketLine.id,
+          quantity: basketLine.quantity
+        }
+        return basketLineQuantity;
+      })))
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getTotal = async () => {
+    try {
+      const response = await axios.get(`https://localhost:5003/api/baskets/${basketId}/basketlines/total`);
+      setTotal(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateBasketLine = async (basketLineId: string, quantity: number) => {
+    const basketLine: BasketLineForUpdateDto = {
+      basketLineId: basketLineId,
+      quantity: quantity,
+    };
+    try {
+      await axios.post(
+        `https://localhost:5003/api/baskets/${basketId}/basketlines/updateBasketLineQuantity`,
+        basketLine
+      );
+      getBasketLines();
+      getTotal();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleChangeQuantity = (event: React.ChangeEvent<HTMLInputElement>, basketLineId: string) => {
+    setBasketLineQuantities(basketLineQuantities => {
+      return basketLineQuantities.map((basketLineQuantity: BasketLineQuantity) => {
+        if (basketLineQuantity.basketLineId === basketLineId) {
+          basketLineQuantity!.quantity = parseInt(event.target.value, 10);
+        }
+        return basketLineQuantity;
+      })
+    });
+  };
+
   React.useEffect(() => {
-    axios
-      .get(`https://localhost:5003/api/baskets/${basketId}/basketlines`, {
-        responseType: "json",
-      })
-      .then((response) => {
-        setBasketLines(response.data);
-        axios
-          .get(
-            `https://localhost:5003/api/baskets/${basketId}/basketlines/total`,
-            {
-              responseType: "json",
-            }
-          )
-          .then((response) => {
-            setTotal(response.data);
-          })
-          .catch((error) => console.log(error));
-      })
-      .catch((error) => console.log(error));
+    getBasketLines();
+    getTotal();
   }, []);
 
   return (
@@ -91,11 +134,12 @@ export default function ShoppingBasket({ basketId }: ShoppingBasketProps) {
                               InputLabelProps={{
                                 shrink: true,
                               }}
-                              value={basketLine.quantity}
+                              value={basketLineQuantities.find(basketLineQuantity => basketLineQuantity.basketLineId === basketLine.id)?.quantity}
+                              onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChangeQuantity(event, basketLine.id)}
                             />
                           </Grid>
                           <Grid item xs={8}>
-                            <Button variant="outlined" color="primary">
+                            <Button variant="outlined" color="primary" onClick={() => updateBasketLine(basketLine.id, basketLineQuantities.find(basketLineQuantity => basketLineQuantity.basketLineId === basketLine.id)!.quantity)}>
                               Update
                             </Button>
                           </Grid>

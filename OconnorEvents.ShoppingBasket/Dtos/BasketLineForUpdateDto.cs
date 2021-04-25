@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace OconnorEvents.ShoppingBasket.Dtos
 {
     public class BasketLineForUpdateDto
     {
-        [Required]
-        public int TicketAmount { get; set; }
+        public Guid BasketLineId { get; set; }
+        public int Quantity { get; set; }
     }
 }

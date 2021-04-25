@@ -3,6 +3,7 @@
     public enum BasketChangeTypeEnum
     {
         Add, 
+        Update,
         Remove
     }
 }

@@ -35,6 +35,7 @@ namespace OconnorEvents.ShoppingBasket.Queries
 
                 return basketLines.Select(b => new BasketLineShoppingBasketDto
                 {
+                    Id = b.Id,
                     EventName = b.Event.Name,
                     EventDate = b.Event.Date,
                     PricePerTicket = b.Price,

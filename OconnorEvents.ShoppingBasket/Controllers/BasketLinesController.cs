@@ -42,7 +42,7 @@ namespace OconnorEvents.ShoppingBasket.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BasketLineDto>> Post(Guid basketId, [FromBody] BasketLineForCreationDto basketLineForCreation)
+        public async Task<ActionResult<BasketLineDto>> CreateBasketLine(Guid basketId, [FromBody] BasketLineForCreationDto basketLineForCreation)
         {
             var basketLineDto = await _mediator.Send(new CreateBasketLine.Request
             {
@@ -54,6 +54,18 @@ namespace OconnorEvents.ShoppingBasket.Controllers
                 "GetBasketLine",
                 new { basketId = basketLineDto.BasketId, basketLineId = basketLineDto.BasketLineId },
                 basketLineDto);
+        }
+
+        [HttpPost]
+        [Route("updateBasketLineQuantity")]
+        public async Task<BasketLineDto> UpdateBasketLineQuantity(Guid basketId, [FromBody] BasketLineForUpdateDto basketLineForUpdate)
+        {
+            return await _mediator.Send(new UpdateBasketLine.Request
+            {
+                BasketId = basketId,
+                BasketLineId = basketLineForUpdate.BasketLineId,
+                Quantity = basketLineForUpdate.Quantity
+            });
         }
 
         [HttpGet]
