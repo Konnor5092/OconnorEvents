@@ -2,9 +2,11 @@ import Catalog from "./catalog";
 import Header from "./header";
 import Details from "./details";
 import ShoppingBasket from "./shoppingBasket";
+import Checkout from "./checkout";
 import { Grid } from "@material-ui/core";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import React, { useState } from "react";
+import { CheckBoxOutlineBlankOutlined, CheckBoxOutlineBlankSharp } from "@material-ui/icons";
 
 export default function HomePage() {
   const location = useLocation();
@@ -33,6 +35,9 @@ export default function HomePage() {
         </Route>
         <Route exact path="/ShoppingBasket">
           <ShoppingBasket basketId={basketId}/>
+        </Route>
+        <Route exact path="/ShoppingBasket/Checkout">
+          <Checkout basketId={basketId}/>
         </Route>
       </Switch>
     </Grid>

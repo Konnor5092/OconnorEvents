@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using OconnorEvents.Mediatr.Core.Behaviours;
 using OconnorEvents.Mediatr.Core.Middleware;
+using OconnorEvents.MessagingBus;
 using OconnorEvents.ShoppingBasket.Commands;
 using System;
 
@@ -39,6 +40,8 @@ namespace OconnorEvents.ShoppingBasket
 
             services.AddDbContext<ShoppingBasketDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddSingleton<IMessageBus>(new AzServiceBusMessageBus(Configuration["ServiceBusConnectionString"]));
 
             services.AddMediatR(typeof(Startup));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehaviour<,>));
