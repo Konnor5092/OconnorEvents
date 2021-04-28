@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import {
   Button,
   Grid as MuiGrid,
@@ -32,6 +32,9 @@ type ShoppingBasketProps = {
 };
 
 export default function ShoppingBasket({ basketId }: ShoppingBasketProps) {
+  const location = useLocation();
+  const history = useHistory();
+
   const [basketLines, setBasketLines] = React.useState<BasketLineView[]>([]);
   const [basketLineQuantities, setBasketLineQuantities] = React.useState<
     BasketLineQuantity[]
@@ -207,7 +210,7 @@ export default function ShoppingBasket({ basketId }: ShoppingBasketProps) {
         </TableContainer>
       </Grid>
       <Grid item xs={8} container justify="flex-end" pt={3}>
-        <Button variant="contained" color="primary">
+        <Button variant="contained" color="primary" onClick={() => history.push(location.pathname + '/checkout')}>
           Check out now!
         </Button>
       </Grid>
