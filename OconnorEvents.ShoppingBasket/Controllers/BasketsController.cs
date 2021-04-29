@@ -7,13 +7,14 @@ using OconnorEvents.ShoppingBasket.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace OconnorEvents.ShoppingBasket.Controllers
 {
     [Route("api/baskets")]
     [ApiController]
-    public class BasketsController : ControllerBase 
+    public class BasketsController : ControllerBase
     {
         private readonly IMediator _mediator;
 
@@ -43,6 +44,15 @@ namespace OconnorEvents.ShoppingBasket.Controllers
                 "GetBasket",
                 new { basketId = basketToReturn.BasketId },
                 basketToReturn);
+        }
+
+        [HttpPost("checkout")]
+        public async Task<IActionResult> Checkout(BasketCheckoutDto basketCheckout)
+        {
+            return await _mediator.Send(new CheckoutBasket.Request()
+            {
+                BasketCheckout = basketCheckout
+            });
         }
     }
 }

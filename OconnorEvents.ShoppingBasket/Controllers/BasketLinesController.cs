@@ -58,24 +58,28 @@ namespace OconnorEvents.ShoppingBasket.Controllers
 
         [HttpPost]
         [Route("updateBasketLineQuantity")]
-        public async Task<BasketLineDto> UpdateBasketLineQuantity(Guid basketId, [FromBody] BasketLineForUpdateDto basketLineForUpdate)
+        public async Task<ActionResult<BasketLineDto>> UpdateBasketLineQuantity(Guid basketId, [FromBody] BasketLineForUpdateDto basketLineForUpdate)
         {
-            return await _mediator.Send(new UpdateBasketLine.Request
+            var basketLine = await _mediator.Send(new UpdateBasketLine.Request
             {
                 BasketId = basketId,
                 BasketLineId = basketLineForUpdate.BasketLineId,
                 Quantity = basketLineForUpdate.Quantity
             });
+
+            return Ok(basketLine);
         }
 
         [HttpGet]
         [Route("total")]
-        public async Task<int> GetTotal(Guid basketId)
+        public async Task<ActionResult<int>> GetTotal(Guid basketId)
         {
-            return await _mediator.Send(new GetTotal.Request
+            var total = await _mediator.Send(new GetTotal.Request
             {
                 BasketId = basketId
             });
+
+            return Ok(total);
         }
     }
 }
