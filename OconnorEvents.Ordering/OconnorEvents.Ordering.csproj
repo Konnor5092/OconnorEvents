@@ -1,14 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <UserSecretsId>ab948d99-5e73-400a-a7c6-ea3becf646de</UserSecretsId>
+    <UserSecretsId>60ad435a-7f3a-4a38-a681-2ee65933a990</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="9.0.0" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -19,13 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\OconnorEvents.Core\OconnorEvents.Core.csproj" />
-    <ProjectReference Include="..\OconnorEvents.Mediatr.Core\OconnorEvents.Mediatr.Core.csproj" />
-    <ProjectReference Include="..\OconnorEvents.MessagingBus\OconnorEvents.MessagingBus.csproj" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>

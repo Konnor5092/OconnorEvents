@@ -2,29 +2,20 @@ import {
   Button,
   Grid as MuiGrid,
   styled,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   TextField,
   Typography as MuiTypography,
 } from "@material-ui/core";
 import { spacing } from "@material-ui/system";
-import moment from "moment";
 import React from "react";
-import { FormEvent } from "react";
-import { FormEventHandler } from "react";
-import * as pickers from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
+import { BasketCheckoutDto } from "../types/basketCheckoutDto";
+import axios from "axios";
 
 const Grid = styled(MuiGrid)(spacing);
-const Typography = styled(MuiTypography)(spacing);
 
 type CheckoutProps = {
   basketId: string;
@@ -34,15 +25,38 @@ export default function Checkout({ basketId }: CheckoutProps) {
   const [lastName, setLastName] = React.useState("");
   const [firstName, setFirstName] = React.useState("");
   const [address, setAddress] = React.useState("");
+  const [city, setCity] = React.useState("");
   const [zipCode, setZipCode] = React.useState("");
   const [country, setCountry] = React.useState("");
   const [email, setEmail] = React.useState("");
-  const [creditCardNumber, setCreditCardNumber] = React.useState(0);
+  const [creditCardNumber, setCreditCardNumber] = React.useState("");
   const [creditCardName, setCreditCardName] = React.useState("");
-  const [expirationDate, setExpirationDate] = React.useState<Date | null>(new Date());
+  const [expirationDate, setExpirationDate] = React.useState("");
   const [cvvCode, setCvvCode] = React.useState(0);
 
-  const placeOrder = () => {};
+  const placeOrder = async () => {
+    const basketCheckout: BasketCheckoutDto = {
+      basketId: basketId,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      address: address,
+      zipCode: zipCode,
+      city: city,
+      country: country,
+      cardNumber: creditCardNumber,
+      cardName: creditCardName,
+      cardExpiration: expirationDate
+    };
+    try {
+      await axios.post(
+        `https://localhost:5003/api/baskets/checkout`,
+        basketCheckout
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Grid container alignItems="center" mt={5} direction="column">
@@ -68,6 +82,14 @@ export default function Checkout({ basketId }: CheckoutProps) {
             label="Address"
             value={address}
             onChange={(event) => setAddress(event.target.value)}
+            fullWidth
+          />
+        </Grid>
+        <Grid item>
+          <TextField
+            label="City"
+            value={city}
+            onChange={(event) => setCity(event.target.value)}
             fullWidth
           />
         </Grid>
@@ -108,7 +130,7 @@ export default function Checkout({ basketId }: CheckoutProps) {
             label="Credit card number"
             value={creditCardNumber}
             onChange={(event) =>
-              setCreditCardNumber(parseInt(event.target.value, 10))
+              setCreditCardNumber(event.target.value)
             }
             fullWidth
           />
@@ -122,7 +144,7 @@ export default function Checkout({ basketId }: CheckoutProps) {
               label="Expiration date"
               value={expirationDate}
               fullWidth
-              onChange={(date: Date | null) => setExpirationDate(date)}
+              onChange={(date: Date | null) => setExpirationDate(date!.toDateString())}
               KeyboardButtonProps={{
                 "aria-label": "change date",
               }}

@@ -59,7 +59,6 @@ namespace OconnorEvents.ShoppingBasket.Commands
                     ZipCode = request.BasketCheckout.ZipCode,
                     City = request.BasketCheckout.City,
                     Country = request.BasketCheckout.Country,
-                    UserId = request.BasketCheckout.UserId,
                     CardNumber = request.BasketCheckout.CardName,
                     CardName = request.BasketCheckout.CardName,
                     CardExpiration = request.BasketCheckout.CardExpiration,

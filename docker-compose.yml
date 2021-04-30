@@ -26,6 +26,17 @@ services:
     depends_on:
       - oconnorevents.sqlserver
 
+  oconnorevents.ordering:
+    container_name: oconnoreventsorderingapi
+    image: ${DOCKER_REGISTRY-}oconnoreventsordering
+    build:
+      context: .
+      dockerfile: OconnorEvents.Ordering/Dockerfile
+    networks:
+      - oconnorevents-network
+    depends_on:
+      - oconnorevents.sqlserver
+
   oconnorevents.sqlserver:
     container_name: oconnoreventsqlserver
     image: "mcr.microsoft.com/mssql/server"
