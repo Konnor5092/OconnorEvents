@@ -1,4 +1,5 @@
 export type BasketCheckoutDto = {
+    userId: string,
     basketId: string,
     firstName: string,
     lastName: string,

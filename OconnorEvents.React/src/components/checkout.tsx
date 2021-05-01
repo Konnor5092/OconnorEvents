@@ -19,9 +19,10 @@ const Grid = styled(MuiGrid)(spacing);
 
 type CheckoutProps = {
   basketId: string;
+  userId: string;
 };
 
-export default function Checkout({ basketId }: CheckoutProps) {
+export default function Checkout({ basketId, userId }: CheckoutProps) {
   const [lastName, setLastName] = React.useState("");
   const [firstName, setFirstName] = React.useState("");
   const [address, setAddress] = React.useState("");
@@ -36,6 +37,7 @@ export default function Checkout({ basketId }: CheckoutProps) {
 
   const placeOrder = async () => {
     const basketCheckout: BasketCheckoutDto = {
+      userId: userId,
       basketId: basketId,
       firstName: firstName,
       lastName: lastName,

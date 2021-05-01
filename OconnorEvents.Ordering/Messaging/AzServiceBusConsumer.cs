@@ -1,4 +1,5 @@
 ﻿using Azure.Messaging.ServiceBus;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using OconnorEvents.MessagingBus;
@@ -17,17 +18,20 @@ namespace OconnorEvents.Ordering.Messaging
     {
         private const string _subscriptionName = "oconnoreventsordering";
         private ServiceBusClient _client;
+        private readonly DbContextOptions<OrderDbContext> _options;
+        private IMessageBus _messageBus;
         
         private readonly string _checkoutMessageTopic;
         private readonly string _orderPaymentRequestMessageTopic;
         private readonly string _orderPaymentUpdatedMessageTopic;
-
         private ServiceBusProcessor _checkoutMessageProcessor;
         private ServiceBusProcessor _orderPaymentUpdatedProcessor;
 
-        public AzServiceBusConsumer(IConfiguration configuration)
+        public AzServiceBusConsumer(IConfiguration configuration, DbContextOptions<OrderDbContext> options, IMessageBus messageBus)
         {
             _client = new ServiceBusClient(configuration["ServiceBusConnectionString"]);
+            _options = options;
+            _messageBus = messageBus;
 
             _checkoutMessageTopic = configuration.GetValue<string>("CheckoutMessageTopic");
             _orderPaymentRequestMessageTopic = configuration.GetValue<string>("OrderPaymentRequestMessageTopic");
@@ -42,52 +46,68 @@ namespace OconnorEvents.Ordering.Messaging
             _checkoutMessageProcessor.ProcessMessageAsync += OnCheckoutMessageReceived;
             _checkoutMessageProcessor.ProcessErrorAsync += ErrorHandler;
 
+            _orderPaymentUpdatedProcessor.ProcessMessageAsync += OnOrderPaymentUpdateReceived;
+            _orderPaymentUpdatedProcessor.ProcessErrorAsync += ErrorHandler;
+
             await _checkoutMessageProcessor.StartProcessingAsync();
+            await _orderPaymentUpdatedProcessor.StartProcessingAsync();
         }
 
         public async void Stop()
         {
             await _checkoutMessageProcessor.StopProcessingAsync();
+            await _orderPaymentUpdatedProcessor.StopProcessingAsync();
         }
 
         private async Task OnCheckoutMessageReceived(ProcessMessageEventArgs args)
         {
-            var body = Encoding.UTF8.GetString(args.Message.Body);
-
-            BasketCheckoutMessageDto basketCheckoutMessage = JsonConvert.DeserializeObject<BasketCheckoutMessageDto>(body);
+            var messageBody = Encoding.UTF8.GetString(args.Message.Body);
+            var basketCheckoutMessage = JsonConvert.DeserializeObject<BasketCheckoutMessageDto>(messageBody);
 
             Guid orderId = Guid.NewGuid();
 
-            //Order order = new Order
-            //{
-            //    UserId = basketCheckoutMessage.UserId,
-            //    Id = orderId,
-            //    OrderPaid = false,
-            //    OrderPlaced = DateTime.Now,
-            //    OrderTotal = basketCheckoutMessage.BasketTotal
-            //};
-
-            //await _orderRepository.AddOrder(order);
-
-            ////send order payment request message
-            //OrderPaymentRequestMessage orderPaymentRequestMessage = new OrderPaymentRequestMessage
-            //{
-            //    CardExpiration = basketCheckoutMessage.CardExpiration,
-            //    CardName = basketCheckoutMessage.CardName,
-            //    CardNumber = basketCheckoutMessage.CardNumber,
-            //    OrderId = orderId,
-            //    Total = basketCheckoutMessage.BasketTotal
-            //};
+            var order = new Order
+            {
+                UserId = basketCheckoutMessage.UserId,
+                Id = orderId,
+                OrderPaid = false,
+                OrderPlaced = DateTime.Now,
+                OrderTotal = basketCheckoutMessage.BasketTotal
+            };
+          
+            var orderPaymentRequestMessage = new OrderPaymentRequestMessage
+            {
+                CardExpiration = basketCheckoutMessage.CardExpiration,
+                CardName = basketCheckoutMessage.CardName,
+                CardNumber = basketCheckoutMessage.CardNumber,
+                OrderId = orderId,
+                Total = basketCheckoutMessage.BasketTotal
+            };
 
             try
             {
-                //await _messageBus.PublishMessage(orderPaymentRequestMessage, orderPaymentRequestMessageTopic);
+                await using var _orderDbContext = new OrderDbContext(_options);
+                await _orderDbContext.Orders.AddAsync(order);
+                await _orderDbContext.SaveChangesAsync();                
+
+                await _messageBus.PublishMessage(orderPaymentRequestMessage, _orderPaymentRequestMessageTopic);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 throw;
             }
+        }
+
+        private async Task OnOrderPaymentUpdateReceived(ProcessMessageEventArgs args)
+        {
+            var messageBody = Encoding.UTF8.GetString(args.Message.Body);
+            var orderPaymentUpdateMessage = JsonConvert.DeserializeObject<OrderPaymentUpdateMessage>(messageBody);
+
+            await using var _orderDbContext = new OrderDbContext(_options);
+            var order = await _orderDbContext.Orders.FindAsync(orderPaymentUpdateMessage.OrderId);
+            order.OrderPaid = orderPaymentUpdateMessage.PaymentSuccess;
+            await _orderDbContext.SaveChangesAsync();
         }
 
         private Task ErrorHandler(ProcessErrorEventArgs args)

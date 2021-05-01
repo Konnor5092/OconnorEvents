@@ -35,14 +35,18 @@ function useQuery() {
 
 type DetailsProps = {
   basketId: string;
-  updateBasketId: (id: string) => void;
+  setUserId: React.Dispatch<React.SetStateAction<string>>;
+  setBasketId: React.Dispatch<React.SetStateAction<string>>;
+  //updateBasketId: (id: string) => void;
+  //updateUserId: (id: string) => void;
   updateBasketLines: () => void;
 };
 
 export default function Details({
   basketId,
-  updateBasketLines,
-  updateBasketId,
+  setUserId, 
+  setBasketId,
+  updateBasketLines
 }: DetailsProps) {
   const classes = useStyles();
   let query = useQuery();
@@ -68,8 +72,10 @@ export default function Details({
   const addToBasket = async () => {
     let localBasketId = basketId;
     if (!localBasketId) {
+      const userId = uuidv4();
+      setUserId(userId);
       const basket: BasketForCreationDto = {
-        userId: uuidv4(),
+        userId: userId,
       };
       try {
         var response = await axios.post<BasketDto>(
@@ -77,7 +83,7 @@ export default function Details({
           basket
         );
         localBasketId = response.data.basketId;
-        updateBasketId(localBasketId);
+        setBasketId(localBasketId);
       } catch (error) {
         console.log(error);
       }

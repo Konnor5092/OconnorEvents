@@ -12,10 +12,11 @@ export default function HomePage() {
   const location = useLocation();
   const history = useHistory();
   const [basketId, setBasketId] = useState('');
+  const [userId, setUserId] = useState('');
   const [basketLines, addBasketLine] = useState(0);
 
   const updateBasketLines = () => addBasketLine(basketLines + 1);
-  const updateBasketId = (id: string) => setBasketId(id);
+  // const updateBasketId = (id: string) => setBasketId(id);
 
   React.useEffect(() => {
     if (location.pathname === "/") {
@@ -31,13 +32,13 @@ export default function HomePage() {
           <Catalog />
         </Route>
         <Route exact path="/EventCatalog/Detail">
-          <Details basketId={basketId} updateBasketLines={updateBasketLines} updateBasketId={updateBasketId} />
+          <Details basketId={basketId} setUserId={setUserId} setBasketId={setBasketId} updateBasketLines={updateBasketLines}/>
         </Route>
         <Route exact path="/ShoppingBasket">
           <ShoppingBasket basketId={basketId}/>
         </Route>
         <Route exact path="/ShoppingBasket/Checkout">
-          <Checkout basketId={basketId}/>
+          <Checkout basketId={basketId} userId={userId}/>
         </Route>
       </Switch>
     </Grid>

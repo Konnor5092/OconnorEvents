@@ -50,6 +50,7 @@ namespace OconnorEvents.ShoppingBasket.Commands
                 var basketCheckoutMessage = new BasketCheckoutMessageDto
                 {
                     Id = Guid.NewGuid(),
+                    UserId = request.BasketCheckout.UserId,
                     CreationDateTime = DateTime.Now,
                     BasketId = request.BasketCheckout.BasketId,
                     FirstName = request.BasketCheckout.FirstName,

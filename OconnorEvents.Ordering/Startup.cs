@@ -41,11 +41,16 @@ namespace OconnorEvents.Ordering
                 });
             });
 
+            var optionsBuilder = new DbContextOptionsBuilder<OrderDbContext>();
+            optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+
             services.AddDbContext<OrderDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddSingleton<IMessageBusConsumer>(new AzServiceBusConsumer(Configuration));
-
+            services.AddSingleton(optionsBuilder.Options);
+            services.AddSingleton<IMessageBus>(new AzServiceBusMessageBus(Configuration["ServiceBusConnectionString"]));
+            services.AddSingleton<IMessageBusConsumer, AzServiceBusConsumer>();
+            
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
