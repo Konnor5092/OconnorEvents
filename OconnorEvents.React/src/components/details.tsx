@@ -102,10 +102,10 @@ export default function Details({
   return (
     <>
       <Grid container justify="center" mt={5}>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <img src={eventDetails.imageUrl} className={classes.image} />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <Typography variant="overline">
             {eventDetails.categoryName?.toUpperCase()}
           </Typography>

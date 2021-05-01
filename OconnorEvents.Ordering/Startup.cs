@@ -8,6 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using OconnorEvents.MessagingBus;
+using OconnorEvents.Ordering.Extensions;
+using OconnorEvents.Ordering.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,11 +44,15 @@ namespace OconnorEvents.Ordering
             services.AddDbContext<OrderDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddSingleton<IMessageBusConsumer>(new AzServiceBusConsumer(Configuration));
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OconnorEvents.Ordering", Version = "v1" });
             });
+
+            services.AddHostedService<MessageBusConsumerService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
