@@ -37,8 +37,6 @@ type DetailsProps = {
   basketId: string;
   setUserId: React.Dispatch<React.SetStateAction<string>>;
   setBasketId: React.Dispatch<React.SetStateAction<string>>;
-  //updateBasketId: (id: string) => void;
-  //updateUserId: (id: string) => void;
   updateBasketLines: () => void;
 };
 

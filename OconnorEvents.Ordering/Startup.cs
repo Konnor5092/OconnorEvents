@@ -1,3 +1,5 @@
+using FluentValidation.AspNetCore;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -8,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using OconnorEvents.Mediatr.CollectionQuery;
 using OconnorEvents.MessagingBus;
 using OconnorEvents.Ordering.Extensions;
 using OconnorEvents.Ordering.Messaging;
@@ -50,8 +53,18 @@ namespace OconnorEvents.Ordering
             services.AddSingleton(optionsBuilder.Options);
             services.AddSingleton<IMessageBus>(new AzServiceBusMessageBus(Configuration["ServiceBusConnectionString"]));
             services.AddSingleton<IMessageBusConsumer, AzServiceBusConsumer>();
-            
-            services.AddControllers();
+
+            services.AddMediatR(typeof(Startup));
+
+            services
+                .AddControllers(c =>
+                {
+                    c.ModelBinderProviders.Insert(0, new SortColumnModelBinder());
+                })
+                .AddFluentValidation(cfg =>
+                {
+                    cfg.RegisterValidatorsFromAssemblyContaining<Startup>();
+                });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OconnorEvents.Ordering", Version = "v1" });
@@ -71,6 +84,7 @@ namespace OconnorEvents.Ordering
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseCors("CorsPolicy");
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {

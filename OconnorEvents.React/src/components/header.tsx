@@ -13,10 +13,10 @@ const useStyles = makeStyles({
 });
 
 type HeaderProps = {
-  tickets: number
-}
+  tickets: number;
+};
 
-export default function Header({tickets}: HeaderProps) {
+export default function Header({ tickets }: HeaderProps) {
   const classes = useStyles();
 
   return (
@@ -28,7 +28,9 @@ export default function Header({tickets}: HeaderProps) {
       item
     >
       <Grid item xs={6} container justify="flex-end" alignItems="center">
-        <Typography color="secondary">My Orders</Typography>
+        <Typography color="secondary">
+          <Link to={`/Order`}>My Orders</Link>
+        </Typography>
       </Grid>
       <Grid item xs={6} container>
         <Grid item xs={6} container justify="flex-start" alignItems="center">

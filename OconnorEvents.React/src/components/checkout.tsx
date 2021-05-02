@@ -14,6 +14,7 @@ import {
 } from "@material-ui/pickers";
 import { BasketCheckoutDto } from "../types/basketCheckoutDto";
 import axios from "axios";
+import { Alert } from "@material-ui/lab";
 
 const Grid = styled(MuiGrid)(spacing);
 
@@ -23,17 +24,18 @@ type CheckoutProps = {
 };
 
 export default function Checkout({ basketId, userId }: CheckoutProps) {
-  const [lastName, setLastName] = React.useState("");
-  const [firstName, setFirstName] = React.useState("");
-  const [address, setAddress] = React.useState("");
-  const [city, setCity] = React.useState("");
-  const [zipCode, setZipCode] = React.useState("");
-  const [country, setCountry] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [creditCardNumber, setCreditCardNumber] = React.useState("");
-  const [creditCardName, setCreditCardName] = React.useState("");
-  const [expirationDate, setExpirationDate] = React.useState("");
-  const [cvvCode, setCvvCode] = React.useState(0);
+  const [lastName, setLastName] = React.useState("OConnor");
+  const [firstName, setFirstName] = React.useState("Matt");
+  const [address, setAddress] = React.useState("99 Hellesdon Road");
+  const [city, setCity] = React.useState("Norwich");
+  const [zipCode, setZipCode] = React.useState("NR6 5EG");
+  const [country, setCountry] = React.useState("England");
+  const [email, setEmail] = React.useState("matty@gmail.com");
+  const [creditCardNumber, setCreditCardNumber] = React.useState("ABC123");
+  const [creditCardName, setCreditCardName] = React.useState("Visa");
+  const [expirationDate, setExpirationDate] = React.useState("0522");
+  const [cvvCode, setCvvCode] = React.useState(971);
+  const [displayAlert, setDisplayAlert] = React.useState(false);
 
   const placeOrder = async () => {
     const basketCheckout: BasketCheckoutDto = {
@@ -55,6 +57,7 @@ export default function Checkout({ basketId, userId }: CheckoutProps) {
         `https://localhost:5003/api/baskets/checkout`,
         basketCheckout
       );
+      setDisplayAlert(true);
     } catch (error) {
       console.log(error);
     }
@@ -166,6 +169,17 @@ export default function Checkout({ basketId, userId }: CheckoutProps) {
             Place order
           </Button>
         </Grid>
+        {displayAlert && (
+          <Grid item> 
+          <Alert
+              onClose={() => {
+                setDisplayAlert(false);
+              }}
+            >
+              Order submitted!
+            </Alert>
+          </Grid>
+          )}
       </Grid>
     </Grid>
   );

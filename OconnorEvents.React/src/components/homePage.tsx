@@ -7,6 +7,7 @@ import { Grid } from "@material-ui/core";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import React, { useState } from "react";
 import { CheckBoxOutlineBlankOutlined, CheckBoxOutlineBlankSharp } from "@material-ui/icons";
+import Orders from "./orders";
 
 export default function HomePage() {
   const location = useLocation();
@@ -16,7 +17,6 @@ export default function HomePage() {
   const [basketLines, addBasketLine] = useState(0);
 
   const updateBasketLines = () => addBasketLine(basketLines + 1);
-  // const updateBasketId = (id: string) => setBasketId(id);
 
   React.useEffect(() => {
     if (location.pathname === "/") {
@@ -39,6 +39,9 @@ export default function HomePage() {
         </Route>
         <Route exact path="/ShoppingBasket/Checkout">
           <Checkout basketId={basketId} userId={userId}/>
+        </Route>
+        <Route exact path="/Order">
+          <Orders userId={userId}/>
         </Route>
       </Switch>
     </Grid>
