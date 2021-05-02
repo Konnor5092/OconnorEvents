@@ -21,9 +21,10 @@ const Grid = styled(MuiGrid)(spacing);
 type CheckoutProps = {
   basketId: string;
   userId: string;
+  setBasketLinesCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export default function Checkout({ basketId, userId }: CheckoutProps) {
+export default function Checkout({ basketId, userId, setBasketLinesCount }: CheckoutProps) {
   const [lastName, setLastName] = React.useState("OConnor");
   const [firstName, setFirstName] = React.useState("Matt");
   const [address, setAddress] = React.useState("99 Hellesdon Road");
@@ -58,6 +59,7 @@ export default function Checkout({ basketId, userId }: CheckoutProps) {
         basketCheckout
       );
       setDisplayAlert(true);
+      setBasketLinesCount(0);
     } catch (error) {
       console.log(error);
     }

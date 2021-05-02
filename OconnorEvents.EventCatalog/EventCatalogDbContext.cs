@@ -41,16 +41,48 @@ namespace OconnorEvents.EventCatalog
                 Name = "Conferences"
             });
 
+
+            var venue1Guid = Guid.Parse("{bcd82a4c-881e-44fc-ba94-c857ab1ab071}");
+            modelBuilder.Entity<Venue>().HasData(new Venue
+            {
+                Id = venue1Guid,
+                Name = "Massey Hall",
+                City = "Toronto",
+                Country = "Canada"
+            });
+
+            var venue2Guid = Guid.Parse("{45929e17-9f3c-4dd4-8043-126c34733dc5}");
+            modelBuilder.Entity<Venue>().HasData(new Venue
+            {
+                Id = venue2Guid,
+                Name = "L'Olympia",
+                City = "Montreal",
+                Country = "Canada"
+            });
+
+            var venue3Guid = Guid.Parse("{2d8f80ca-616f-4928-bd09-a1849fec5a9a}");
+            modelBuilder.Entity<Venue>().HasData(new Venue
+            {
+                Id = venue3Guid,
+                Name = "Commodore Ballroom",
+                City = "Vancouver",
+                Country = "Canada"
+            });
+
+            DateTime eventDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 7, 0, 0);
+
+
             modelBuilder.Entity<Event>().HasData(new Event
             {
                 Id = Guid.Parse("{EE272F8B-6096-4CB6-8625-BB4BB2D89E8B}"),
                 Name = "John Egbert Live",
                 Price = 65,
                 Artist = "John Egbert",
-                Date = DateTime.Now.AddMonths(6),
+                Date = eventDate.AddMonths(6),
                 Description = "Join John for his farwell tour across 15 continents. John really needs no introduction since he has already mesmerized the world with his banjo.",
-                ImageUrl = "https://gillcleerenpluralsight.blob.core.windows.net/files/GloboTicket/banjo.jpg",
-                CategoryId = concertGuid
+                ImageUrl = "https://neilmorrisseypluralsight.blob.core.windows.net/imgs/banjo.jpg",
+                CategoryId = concertGuid,
+                VenueId = venue1Guid
             });
 
             modelBuilder.Entity<Event>().HasData(new Event
@@ -59,10 +91,11 @@ namespace OconnorEvents.EventCatalog
                 Name = "The State of Affairs: Michael Live!",
                 Price = 85,
                 Artist = "Michael Johnson",
-                Date = DateTime.Now.AddMonths(9),
+                Date = eventDate.AddMonths(9),
                 Description = "Michael Johnson doesn't need an introduction. His 25 concert across the globe last year were seen by thousands. Can we add you to the list?",
-                ImageUrl = "https://gillcleerenpluralsight.blob.core.windows.net/files/GloboTicket/michael.jpg",
-                CategoryId = concertGuid
+                ImageUrl = "https://neilmorrisseypluralsight.blob.core.windows.net/imgs/michael.jpg",
+                CategoryId = concertGuid,
+                VenueId = venue1Guid
             });
 
             modelBuilder.Entity<Event>().HasData(new Event
@@ -71,10 +104,11 @@ namespace OconnorEvents.EventCatalog
                 Name = "Clash of the DJs",
                 Price = 85,
                 Artist = "DJ 'The Mike'",
-                Date = DateTime.Now.AddMonths(4),
+                Date = eventDate.AddMonths(4),
                 Description = "DJs from all over the world will compete in this epic battle for eternal fame.",
-                ImageUrl = "https://gillcleerenpluralsight.blob.core.windows.net/files/GloboTicket/dj.jpg",
-                CategoryId = concertGuid
+                ImageUrl = "https://neilmorrisseypluralsight.blob.core.windows.net/imgs/dj.jpg",
+                CategoryId = concertGuid,
+                VenueId = venue2Guid
             });
 
             modelBuilder.Entity<Event>().HasData(new Event
@@ -83,10 +117,11 @@ namespace OconnorEvents.EventCatalog
                 Name = "Spanish guitar hits with Manuel",
                 Price = 25,
                 Artist = "Manuel Santinonisi",
-                Date = DateTime.Now.AddMonths(4),
+                Date = eventDate.AddMonths(4),
                 Description = "Get on the hype of Spanish Guitar concerts with Manuel.",
-                ImageUrl = "https://gillcleerenpluralsight.blob.core.windows.net/files/GloboTicket/guitar.jpg",
-                CategoryId = concertGuid
+                ImageUrl = "https://neilmorrisseypluralsight.blob.core.windows.net/imgs/guitar.jpg",
+                CategoryId = concertGuid,
+                VenueId = venue2Guid
             });
 
             modelBuilder.Entity<Event>().HasData(new Event
@@ -95,10 +130,11 @@ namespace OconnorEvents.EventCatalog
                 Name = "Techorama 2021",
                 Price = 400,
                 Artist = "Many",
-                Date = DateTime.Now.AddMonths(10),
+                Date = eventDate.AddMonths(10),
                 Description = "The best tech conference in the world",
-                ImageUrl = "https://gillcleerenpluralsight.blob.core.windows.net/files/GloboTicket/conf.jpg",
-                CategoryId = conferenceGuid
+                ImageUrl = "https://neilmorrisseypluralsight.blob.core.windows.net/imgs/conf.jpg",
+                CategoryId = conferenceGuid,
+                VenueId = venue3Guid
             });
 
             modelBuilder.Entity<Event>().HasData(new Event
@@ -107,10 +143,11 @@ namespace OconnorEvents.EventCatalog
                 Name = "To the Moon and Back",
                 Price = 135,
                 Artist = "Nick Sailor",
-                Date = DateTime.Now.AddMonths(8),
+                Date = eventDate.AddMonths(8),
                 Description = "The critics are over the moon and so will you after you've watched this sing and dance extravaganza written by Nick Sailor, the man from 'My dad and sister'.",
-                ImageUrl = "https://gillcleerenpluralsight.blob.core.windows.net/files/GloboTicket/musical.jpg",
-                CategoryId = musicalGuid
+                ImageUrl = "https://neilmorrisseypluralsight.blob.core.windows.net/imgs/musical.jpg",
+                CategoryId = musicalGuid,
+                VenueId = venue3Guid
             });
         }
     }

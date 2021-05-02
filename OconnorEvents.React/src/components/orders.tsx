@@ -26,7 +26,9 @@ export default function Orders({ userId }: OrderProps) {
 
   React.useEffect(() => {
     axios
-      .get(`https://localhost:5005/api/order/user/${userId}`, { responseType: "json" })
+      .get(`https://localhost:5005/api/order/user/${userId}`, {
+        responseType: "json",
+      })
       .then((response) => {
         setOrders(response.data.items);
       })
@@ -36,7 +38,7 @@ export default function Orders({ userId }: OrderProps) {
   return (
     <Grid container alignItems="center" mt={5} direction="column">
       <Grid item xs={6} container direction="column" spacing={3}>
-      <TableContainer>
+        <TableContainer>
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
@@ -44,6 +46,7 @@ export default function Orders({ userId }: OrderProps) {
                 <TableCell>DATE</TableCell>
                 <TableCell>TOTAL</TableCell>
                 <TableCell>PAID</TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -57,7 +60,12 @@ export default function Orders({ userId }: OrderProps) {
                       {moment(order.orderPlaced).format("DD/MM/YYYY")}
                     </TableCell>
                     <TableCell>{order.orderTotal}</TableCell>
-                    <TableCell>{order.orderPaid}</TableCell>
+                    <TableCell>{order.orderPaid.toString()}</TableCell>
+                    <TableCell>
+                      <Button variant="outlined" color="primary">
+                        Details
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>

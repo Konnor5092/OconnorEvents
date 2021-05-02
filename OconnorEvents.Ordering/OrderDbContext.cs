@@ -12,5 +12,7 @@ namespace OconnorEvents.Ordering
         public OrderDbContext(DbContextOptions<OrderDbContext> options) : base(options) { }
 
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderLine> OrderLines { get; set; }
+        public DbSet<Customer> Customers { get; set; }
     }
 }

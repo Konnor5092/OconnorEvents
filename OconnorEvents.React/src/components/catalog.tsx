@@ -66,7 +66,7 @@ export default function Catalog() {
                     <TableCell>{event.price}</TableCell>
                     <TableCell>
                       <Button variant="contained" color="primary">
-                        <Link to={`${path}/Detail?eventId=${event.eventId}`}>
+                        <Link to={`${path}/Detail?eventId=${event.eventId}`} style={{ textDecoration: 'none', color: 'white' }}>
                           Details
                         </Link>
                       </Button>

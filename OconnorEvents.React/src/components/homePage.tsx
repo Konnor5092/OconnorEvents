@@ -14,9 +14,9 @@ export default function HomePage() {
   const history = useHistory();
   const [basketId, setBasketId] = useState('');
   const [userId, setUserId] = useState('');
-  const [basketLines, addBasketLine] = useState(0);
+  const [basketLinesCount, setBasketLinesCount] = useState(0);
 
-  const updateBasketLines = () => addBasketLine(basketLines + 1);
+  const updateBasketLines = () => setBasketLinesCount(basketLinesCount + 1);
 
   React.useEffect(() => {
     if (location.pathname === "/") {
@@ -26,7 +26,7 @@ export default function HomePage() {
 
   return (
     <Grid container direction="column" spacing={2}>
-      <Header tickets={basketLines} />
+      <Header tickets={basketLinesCount} />
       <Switch>
         <Route exact path="/EventCatalog">
           <Catalog />
@@ -38,7 +38,7 @@ export default function HomePage() {
           <ShoppingBasket basketId={basketId}/>
         </Route>
         <Route exact path="/ShoppingBasket/Checkout">
-          <Checkout basketId={basketId} userId={userId}/>
+          <Checkout basketId={basketId} userId={userId} setBasketLinesCount={setBasketLinesCount}/>
         </Route>
         <Route exact path="/Order">
           <Orders userId={userId}/>

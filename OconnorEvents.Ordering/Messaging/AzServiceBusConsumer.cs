@@ -64,6 +64,26 @@ namespace OconnorEvents.Ordering.Messaging
             var messageBody = Encoding.UTF8.GetString(args.Message.Body);
             var basketCheckoutMessage = JsonConvert.DeserializeObject<BasketCheckoutMessageDto>(messageBody);
 
+            await using var _orderDbContext = new OrderDbContext(_options);
+            var existingCustomer = await _orderDbContext.Customers.FindAsync(basketCheckoutMessage.UserId);
+
+            if (existingCustomer == null)
+            {
+                var newCustomer = new Customer
+                {
+                    CustomerId = basketCheckoutMessage.UserId,
+                    FirstName = basketCheckoutMessage.FirstName,
+                    LastName = basketCheckoutMessage.LastName,
+                    Email = basketCheckoutMessage.Email,
+                    Address = basketCheckoutMessage.Address,
+                    ZipCode = basketCheckoutMessage.ZipCode,
+                    City = basketCheckoutMessage.City,
+                    Country = basketCheckoutMessage.Country
+                };
+
+                await _orderDbContext.Customers.AddAsync(newCustomer);
+            }
+
             Guid orderId = Guid.NewGuid();
 
             var order = new Order
@@ -74,7 +94,28 @@ namespace OconnorEvents.Ordering.Messaging
                 OrderPlaced = DateTime.Now,
                 OrderTotal = basketCheckoutMessage.BasketTotal
             };
-          
+
+            order.OrderLines = new List<OrderLine>();
+
+            foreach (var bLine in basketCheckoutMessage.BasketLines)
+            {
+                var orderLine = new OrderLine
+                {
+                    OrderLineId = Guid.NewGuid(),
+                    Price = bLine.Price,
+                    TicketAmount = bLine.TicketAmount,
+                    EventId = bLine.EventId,
+                    EventName = bLine.EventName,
+                    EventDate = bLine.EventDate,
+                    VenueName = bLine.VenueName,
+                    VenueCity = bLine.VenueCity,
+                    VenueCountry = bLine.VenueCountry
+                };
+                order.OrderLines.Add(orderLine);
+            }
+
+            await _orderDbContext.Orders.AddAsync(order);
+
             var orderPaymentRequestMessage = new OrderPaymentRequestMessage
             {
                 CardExpiration = basketCheckoutMessage.CardExpiration,
@@ -85,9 +126,7 @@ namespace OconnorEvents.Ordering.Messaging
             };
 
             try
-            {
-                await using var _orderDbContext = new OrderDbContext(_options);
-                await _orderDbContext.Orders.AddAsync(order);
+            {           
                 await _orderDbContext.SaveChangesAsync();                
 
                 await _messageBus.PublishMessage(orderPaymentRequestMessage, _orderPaymentRequestMessageTopic);

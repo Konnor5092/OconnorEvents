@@ -44,7 +44,8 @@ namespace OconnorEvents.ShoppingBasket.Commands
             public async Task<IActionResult> Handle(Request request, CancellationToken cancellationToken)
             {
                 var basket = await _context.Baskets
-                    .Include(sb => sb.BasketLines)
+                    .Include(b => b.BasketLines)
+                        .ThenInclude(bl => bl.Event)
                     .SingleAsync(b => b.Id == request.BasketCheckout.BasketId);
 
                 var basketCheckoutMessage = new BasketCheckoutMessageDto
@@ -65,9 +66,16 @@ namespace OconnorEvents.ShoppingBasket.Commands
                     CardExpiration = request.BasketCheckout.CardExpiration,
                     BasketLines = basket.BasketLines.Select(b => new BasketLineMessageDto
                     {
+                        BasketId = b.BasketId,
                         BasketLineId = b.Id,
                         Price = b.Price,
-                        TicketAmount = b.TicketAmount
+                        TicketAmount = b.TicketAmount,
+                        EventId = b.Event.Id,
+                        EventName = b.Event.Name,
+                        EventDate = b.Event.Date,
+                        VenueName = b.Event.VenueName,
+                        VenueCity = b.Event.VenueCity,
+                        VenueCountry = b.Event.VenueCountry
                     }).ToList(),
                     BasketTotal = basket.BasketLines.Sum(b => b.Price * b.TicketAmount)
                 };

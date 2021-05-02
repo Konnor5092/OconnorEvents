@@ -34,7 +34,9 @@ export default function Header({ tickets }: HeaderProps) {
       </Grid>
       <Grid item xs={6} container>
         <Grid item xs={6} container justify="flex-start" alignItems="center">
-          <Typography variant="h3">OconnorEvents</Typography>
+          <Typography variant="h3">
+            <Link to="/EventCatalog" style={{ textDecoration: 'none', color: 'white' }}>OconnorEvents</Link>
+          </Typography>
         </Grid>
         <Grid item xs={6} container justify="flex-end">
           <Grid
