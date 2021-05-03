@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OconnorEvents.Mediatr.CollectionQuery\OconnorEvents.Mediatr.CollectionQuery.csproj" />
+    <ProjectReference Include="..\OconnorEvents.Mediatr.Core\OconnorEvents.Mediatr.Core.csproj" />
     <ProjectReference Include="..\OconnorEvents.MessagingBus\OconnorEvents.MessagingBus.csproj" />
   </ItemGroup>
 

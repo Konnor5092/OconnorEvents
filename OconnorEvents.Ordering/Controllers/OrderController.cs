@@ -22,7 +22,7 @@ namespace OconnorEvents.Ordering.Controllers
         }
 
         [HttpGet("user/{userId}")]
-        public async Task<CollectionQueryResponse<OrderDto>> GetOrders(Guid userId, [FromQuery] IEnumerable<SortColumn>? sort,
+        public async Task<CollectionQueryResponse<OrderListDto>> GetOrders(Guid userId, [FromQuery] IEnumerable<SortColumn>? sort,
            int pageSize = 100,
            int pageNumber = 0)
         {
@@ -33,6 +33,13 @@ namespace OconnorEvents.Ordering.Controllers
                 SortOrder = sort,
                 UserId = userId
             });
+        }
+
+        [HttpGet("detail")]
+        public async Task<IActionResult> GetOrderDetails([FromQuery] Guid orderId)
+        {
+            //var order = await _orderRepository.GetOrderById(orderId);
+            return Ok();
         }
     }
 }

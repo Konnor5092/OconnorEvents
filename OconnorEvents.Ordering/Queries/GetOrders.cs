@@ -12,12 +12,12 @@ namespace OconnorEvents.Ordering.Queries
 {
     public class GetOrders
     {
-        public class Request : CollectionQueryRequest<OrderDto>
+        public class Request : CollectionQueryRequest<OrderListDto>
         {
             public Guid UserId { get; set; }
         }
 
-        public class Handler : CollectionQueryRequestHandler<Request, OrderDto, Order>
+        public class Handler : CollectionQueryRequestHandler<Request, OrderListDto, Order>
         {
             private readonly OrderDbContext _context;
 
@@ -36,9 +36,9 @@ namespace OconnorEvents.Ordering.Queries
                 return Task.FromResult(_context.Orders.Where(o => o.UserId == request.UserId));
             }
 
-            protected override Expression<Func<Order, OrderDto>> Map()
+            protected override Expression<Func<Order, OrderListDto>> Map()
             {
-                return o => new OrderDto
+                return o => new OrderListDto
                 {
                     Id = o.Id,
                     UserId = o.UserId,

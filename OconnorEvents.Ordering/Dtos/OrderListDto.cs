@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OconnorEvents.Ordering.Dtos
 {
-    public class OrderDto
+    public class OrderListDto
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }

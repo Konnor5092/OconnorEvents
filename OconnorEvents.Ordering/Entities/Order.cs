@@ -1,11 +1,12 @@
-﻿using System;
+﻿using OconnorEvents.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace OconnorEvents.Ordering.Entities
 {
-    public class Order
+    public class Order : IEntity
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }

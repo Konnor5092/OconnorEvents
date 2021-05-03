@@ -71,7 +71,7 @@ namespace OconnorEvents.Ordering.Messaging
             {
                 var newCustomer = new Customer
                 {
-                    CustomerId = basketCheckoutMessage.UserId,
+                    Id = basketCheckoutMessage.UserId,
                     FirstName = basketCheckoutMessage.FirstName,
                     LastName = basketCheckoutMessage.LastName,
                     Email = basketCheckoutMessage.Email,
@@ -101,7 +101,7 @@ namespace OconnorEvents.Ordering.Messaging
             {
                 var orderLine = new OrderLine
                 {
-                    OrderLineId = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     Price = bLine.Price,
                     TicketAmount = bLine.TicketAmount,
                     EventId = bLine.EventId,
