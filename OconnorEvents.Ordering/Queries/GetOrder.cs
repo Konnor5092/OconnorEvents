@@ -53,6 +53,7 @@ namespace OconnorEvents.Ordering.Queries
                     {
                         OrderLineId = ol.Id,
                         Price = ol.Price,
+                        TicketAmount = ol.TicketAmount,
                         EventName = ol.EventName,
                         EventDate = ol.EventDate,
                         VenueName = ol.VenueName,

@@ -8,6 +8,7 @@ import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import React, { useState } from "react";
 import { CheckBoxOutlineBlankOutlined, CheckBoxOutlineBlankSharp } from "@material-ui/icons";
 import Orders from "./orders";
+import OrderDetails from "./orderDetails";
 
 export default function HomePage() {
   const location = useLocation();
@@ -42,6 +43,9 @@ export default function HomePage() {
         </Route>
         <Route exact path="/Order">
           <Orders userId={userId}/>
+        </Route>
+        <Route exact path="/Order/Detail">
+          <OrderDetails />
         </Route>
       </Switch>
     </Grid>

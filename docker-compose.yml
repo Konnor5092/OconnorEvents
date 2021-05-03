@@ -37,6 +37,15 @@ services:
     depends_on:
       - oconnorevents.sqlserver
 
+  oconnorevents.payment:
+    container_name: oconnoreventspaymentapi
+    image: ${DOCKER_REGISTRY-}oconnoreventspayment
+    build:
+      context: .
+      dockerfile: OconnorEvents.Payment/Dockerfile
+    networks:
+      - oconnorevents-network
+
   oconnorevents.sqlserver:
     container_name: oconnoreventsqlserver
     image: "mcr.microsoft.com/mssql/server"

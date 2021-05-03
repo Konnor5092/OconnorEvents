@@ -14,6 +14,7 @@ import { Order } from "../types/order";
 import moment from "moment";
 import axios from "axios";
 import React from "react";
+import { Link, useRouteMatch } from "react-router-dom";
 
 const Grid = styled(MuiGrid)(spacing);
 
@@ -23,6 +24,7 @@ type OrderProps = {
 
 export default function Orders({ userId }: OrderProps) {
   const [orders, setOrders] = React.useState<Order[]>([]);
+  const { path } = useRouteMatch();
 
   React.useEffect(() => {
     axios
@@ -63,7 +65,9 @@ export default function Orders({ userId }: OrderProps) {
                     <TableCell>{order.orderPaid.toString()}</TableCell>
                     <TableCell>
                       <Button variant="outlined" color="primary">
-                        Details
+                      <Link to={`${path}/Detail?orderId=${order.id}`} style={{ textDecoration: 'none' }}>
+                          Details
+                        </Link>
                       </Button>
                     </TableCell>
                   </TableRow>

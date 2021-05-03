@@ -22,7 +22,7 @@ const useStyles = makeStyles({
 export default function Catalog() {
   const classes = useStyles();
   const [eventList, setEventList] = React.useState<EventList[]>([]);
-  let { path } = useRouteMatch();
+  const { path } = useRouteMatch();
 
   React.useEffect(() => {
     axios

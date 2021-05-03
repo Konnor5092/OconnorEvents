@@ -35,11 +35,13 @@ namespace OconnorEvents.Ordering.Controllers
             });
         }
 
-        [HttpGet("detail")]
-        public async Task<IActionResult> GetOrderDetails([FromQuery] Guid orderId)
+        [HttpGet("detail/{orderId}")]
+        public async Task<OrderDetailsDto> GetOrderDetails(Guid orderId)
         {
-            //var order = await _orderRepository.GetOrderById(orderId);
-            return Ok();
+            return await _mediator.Send(new GetOrder.Request()
+            {
+                OrderId = orderId
+            });
         }
     }
 }
