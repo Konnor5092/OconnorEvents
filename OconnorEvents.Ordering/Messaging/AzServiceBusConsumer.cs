@@ -128,8 +128,8 @@ namespace OconnorEvents.Ordering.Messaging
             try
             {           
                 await _orderDbContext.SaveChangesAsync();                
-
                 await _messageBus.PublishMessage(orderPaymentRequestMessage, _orderPaymentRequestMessageTopic);
+                await args.CompleteMessageAsync(args.Message);
             }
             catch (Exception e)
             {
@@ -147,6 +147,8 @@ namespace OconnorEvents.Ordering.Messaging
             var order = await _orderDbContext.Orders.FindAsync(orderPaymentUpdateMessage.OrderId);
             order.OrderPaid = orderPaymentUpdateMessage.PaymentSuccess;
             await _orderDbContext.SaveChangesAsync();
+
+            await args.CompleteMessageAsync(args.Message);
         }
 
         private Task ErrorHandler(ProcessErrorEventArgs args)

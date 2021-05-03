@@ -1,7 +1,7 @@
 ﻿using System;
 using OconnorEvents.MessagingBus;
 
-namespace OconnorEvents.Payment.Messages
+namespace OconnorEvents.Payment.Dtos
 {
     public class OrderPaymentUpdateMessage: IntegrationBaseMessage
     {

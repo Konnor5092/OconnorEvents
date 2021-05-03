@@ -27,9 +27,9 @@ function useQuery() {
 
 export default function OrderDetails() {
   const query = useQuery();
-  const [orderDetails, setOrderDetails] = React.useState<OrderDetailsDto>(
-    Object
-  );
+  const [orderDetails, setOrderDetails] = React.useState<
+    OrderDetailsDto | undefined
+  >(undefined);
 
   React.useEffect(() => {
     axios
@@ -49,17 +49,20 @@ export default function OrderDetails() {
         <Typography variant="h5" py={2}>
           Here are the events for your order
         </Typography>
-        <Grid container py={2}>
-          <Grid item xs={4}>
-            Order Date: <b>{moment(orderDetails.orderPlaced).format("DD/MM/YYYY")}</b>
+        {orderDetails && (
+          <Grid container py={2}>
+            <Grid item xs={4}>
+              Order Date:{" "}
+              <b>{moment(orderDetails.orderPlaced).format("DD/MM/YYYY")}</b>
+            </Grid>
+            <Grid item xs={4}>
+              Order Total: <b>${orderDetails.orderTotal}</b>
+            </Grid>
+            <Grid item xs={4}>
+              Order Paid: <b>{orderDetails.orderPaid.toString()}</b>
+            </Grid>
           </Grid>
-          <Grid item xs={4}>
-            Order Total: <b>${orderDetails.orderTotal}</b>
-          </Grid>
-          <Grid item xs={4}>
-            Order Paid: <b>{orderDetails.orderPaid.toString()}</b>
-          </Grid>
-        </Grid>
+        )}
         <TableContainer>
           <Table aria-label="simple table">
             <TableHead>
@@ -73,7 +76,7 @@ export default function OrderDetails() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orderDetails.orderLines &&
+              {orderDetails &&
                 orderDetails.orderLines.map(
                   (orderLine: OrderLineDetailsDto) => (
                     <TableRow key={orderLine.orderLineId}>

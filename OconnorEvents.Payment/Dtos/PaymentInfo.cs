@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace OconnorEvents.Payment.Messages
+namespace OconnorEvents.Payment.Dtos
 {
-    public class OrderPaymentRequestMessage
+    public class PaymentInfo
     {
-        public Guid OrderId { get; set; }
         public int Total { get; set; }
         public string CardNumber { get; set; }
         public string CardName { get; set; }
