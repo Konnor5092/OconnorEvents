@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  oconnorevents.eventcatalog:
+    image: oconnorevents.azurecr.io/oconnoreventseventcatalogapi:1
+
+  oconnorevents.shoppingbasket:
+    image: oconnorevents.azurecr.io/oconnoreventsshoppingbasketapi:1
+
+  oconnorevents.ordering:
+    image: oconnorevents.azurecr.io/oconnoreventsorderingapi:1
+
+  oconnorevents.payment:
+    image: oconnorevents.azurecr.io/oconnoreventspaymentapi:1
