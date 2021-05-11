@@ -1,0 +1,27 @@
+﻿trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - OconnorEvents/OconnorEvents.EventCatalog/*
+
+stages:
+- stage: Build
+  displayName: Build and push stage
+  jobs:  
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore' 
+      inputs:
+        command: 'restore'
+        projects: '**/OconnorEvents.EventCatalog.csproj'
+    - task: DotNetCoreCLI@2
+      displayName: 'Build'
+      inputs:
+        command: 'build'
+        projects: '**/OconnorEvents.EventCatalog.csproj'
